@@ -1,6 +1,5 @@
 import {
   useCallback,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -32,7 +31,12 @@ interface VirtualImageGalleryProps {
   onDownload: (image: ProcessedImage) => void
 }
 
-function useColumnCount(containerRef: RefObject<HTMLElement | null>) {
+/**
+ * `mounted` must flip when the gallery section appears: it renders null while
+ * empty, so an effect that ran only once would never see the element and the
+ * grid would stay stuck at 1 column.
+ */
+function useColumnCount(containerRef: RefObject<HTMLElement | null>, mounted: boolean) {
   const [cols, setCols] = useState(1)
 
   useLayoutEffect(() => {
@@ -52,7 +56,7 @@ function useColumnCount(containerRef: RefObject<HTMLElement | null>) {
     const ro = new ResizeObserver(update)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [containerRef])
+  }, [containerRef, mounted])
 
   return cols
 }
@@ -73,24 +77,33 @@ export function VirtualImageGallery({
   onDownload,
 }: VirtualImageGalleryProps) {
   const listRef = useRef<HTMLDivElement>(null)
-  const columns = useColumnCount(listRef)
+  const hasImages = images.length > 0
+  const columns = useColumnCount(listRef, hasImages)
   const rowCount = Math.max(0, Math.ceil(images.length / columns))
   const [scrollMargin, setScrollMargin] = useState(0)
 
   useLayoutEffect(() => {
-    setScrollMargin(listRef.current?.offsetTop ?? 0)
-  }, [images.length, columns])
+    // The drop zone / PDF status above can change height; keep the margin current.
+    const el = listRef.current
+    if (!el) return
+    const update = () => setScrollMargin(el.offsetTop)
+    update()
+    const ro = new ResizeObserver(update)
+    ro.observe(document.body)
+    return () => ro.disconnect()
+  }, [hasImages, columns])
 
   const virtualizer = useWindowVirtualizer({
     count: rowCount,
     estimateSize: () => ESTIMATED_CARD_HEIGHT,
     overscan: OVERSCAN,
     scrollMargin,
+    // Sizes are cached per key. Including the column count means a layout change
+    // starts fresh, while adding images keeps the rows already measured.
+    // (Calling virtualizer.measure() on every new batch wiped those sizes, and
+    // mounted rows fell back to the 420px estimate and overlapped.)
+    getItemKey: (index) => `${columns}:${index}`,
   })
-
-  useEffect(() => {
-    virtualizer.measure()
-  }, [images.length, columns, scrollMargin, virtualizer])
 
   const virtualRows = virtualizer.getVirtualItems()
 
@@ -159,6 +172,8 @@ export function VirtualImageGallery({
                 display: 'grid',
                 gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
                 gap: GAP,
+                // Inside the measured box, so rows get the same gap as columns.
+                paddingBottom: GAP,
                 alignItems: 'start',
               }}
             >
