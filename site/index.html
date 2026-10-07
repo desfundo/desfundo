@@ -102,8 +102,9 @@
 
     .donate { display: grid; gap: 1.5rem; }
     @media (min-width: 860px) { .donate { grid-template-columns: 1fr 1fr; } }
-    .donate-region { margin: 2.2rem 0 1rem; font-size: 1.3rem; color: var(--mint); }
-    .donate + .donate-region { margin-top: 3rem; }
+    .donate { align-items: start; }
+    .donate-col { display: grid; gap: 1rem; }
+    .donate-region { margin: 0.5rem 0 0; font-size: 1.3rem; color: var(--mint); }
     .btn-paypal { margin-top: 1rem; background: #ffc439; color: #003087; }
     .btn-paypal:hover { background: #f2ba36; }
     .btn-paypal i { font-weight: 800; }
@@ -309,40 +310,47 @@
       <h2>Apoie o projeto</h2>
       <p class="lede">O Desfundo é e continuará gratuito. Se ele economizou o seu tempo ou o seu dinheiro, considere apoiar o desenvolvimento. Qualquer valor ajuda.</p>
 
-      <h3 class="donate-region">Do Brasil</h3>
       <div class="donate">
-        <div class="card pix">
-          <h3>Pix</h3>
-          <p class="holder">O Pix cai na conta de <strong>Fabricio</strong>, criador do Desfundo. É esse nome que o seu banco vai mostrar na confirmação.</p>
-          <img src="pix-qr.svg" alt="QR code Pix para doação" width="200" height="200" />
-          <button class="btn btn-primary" type="button" data-copy="00020101021126580014br.gov.bcb.pix0136de539899-0b61-484e-9e9f-eed74734be865204000053039865802BR5908DESFUNDO6006BRASIL62070503***6304CB23">Copiar Pix copia e cola</button>
-          <button class="btn btn-ghost" type="button" data-copy="de539899-0b61-484e-9e9f-eed74734be86">Copiar chave</button>
-          <p class="key">Chave aleatória: de539899-0b61-484e-9e9f-eed74734be86</p>
+        <div class="donate-col">
+          <h3 class="donate-region">Do Brasil</h3>
+          <div class="card pix">
+            <h3>Pix</h3>
+            <p class="holder">O Pix cai na conta de <strong>Fabricio</strong>, criador do Desfundo. É esse nome que o seu banco vai mostrar na confirmação.</p>
+            <img src="pix-qr.svg" alt="QR code Pix para doação" width="200" height="200" />
+            <button class="btn btn-primary" type="button" data-copy="00020101021126580014br.gov.bcb.pix0136de539899-0b61-484e-9e9f-eed74734be865204000053039865802BR5908DESFUNDO6006BRASIL62070503***6304CB23">Copiar Pix copia e cola</button>
+            <button class="btn btn-ghost" type="button" data-copy="de539899-0b61-484e-9e9f-eed74734be86">Copiar chave</button>
+            <p class="key">Chave aleatória: de539899-0b61-484e-9e9f-eed74734be86</p>
+          </div>
+          <div class="card">
+            <h3>PayPal</h3>
+            <p>Com saldo PayPal ou cartão de crédito, em reais.</p>
+            <a class="btn btn-paypal" data-paypal="BRL" href="#" target="_blank" rel="noopener">Doar com <i>PayPal</i></a>
+          </div>
+          <div class="card">
+            <h3>GitHub Sponsors</h3>
+            <p>Uma vez ou todo mês, com cartão.</p>
+            <iframe src="https://github.com/sponsors/fabbbb12/button" title="Sponsor fabbbb12" height="32" width="114" style="border: 0; border-radius: 6px; margin-top: 1rem;"></iframe>
+          </div>
         </div>
-        <div class="card">
-          <h3>PayPal</h3>
-          <p>Com saldo PayPal ou cartão de crédito, em reais.</p>
-          <a class="btn btn-paypal" data-paypal="BRL" href="#" target="_blank" rel="noopener">Doar com <i>PayPal</i></a>
-          <h3 style="margin-top: 2rem;">GitHub Sponsors</h3>
-          <p>Uma vez ou todo mês, com cartão.</p>
-          <iframe src="https://github.com/sponsors/fabbbb12/button" title="Sponsor fabbbb12" height="32" width="114" style="border: 0; border-radius: 6px; margin-top: 1rem;"></iframe>
-          <h3 style="margin-top: 2rem;">Outras formas de ajudar</h3>
-          <p>Dê uma estrela no <a href="https://github.com/desfundo/desfundo">GitHub</a>, indique o Desfundo para quem vende online ou <a href="https://github.com/desfundo/desfundo/issues">reporte um problema</a>.</p>
+
+        <div class="donate-col" lang="en">
+          <h3 class="donate-region">From abroad</h3>
+          <div class="card">
+            <h3>PayPal</h3>
+            <p>Donate once with your PayPal balance or any credit card, in US dollars.</p>
+            <a class="btn btn-paypal" data-paypal="USD" href="#" target="_blank" rel="noopener">Donate with <i>PayPal</i></a>
+          </div>
+          <div class="card">
+            <h3>GitHub Sponsors</h3>
+            <p>Support Desfundo once or monthly. GitHub charges no fees on personal sponsorships.</p>
+            <iframe src="https://github.com/sponsors/fabbbb12/button" title="Sponsor fabbbb12" height="32" width="114" style="border: 0; border-radius: 6px; margin-top: 1rem;"></iframe>
+          </div>
         </div>
       </div>
 
-      <h3 class="donate-region" lang="en">From abroad</h3>
-      <div class="donate" lang="en">
-        <div class="card">
-          <h3>PayPal</h3>
-          <p>Donate once with your PayPal balance or any credit card, in US dollars.</p>
-          <a class="btn btn-paypal" data-paypal="USD" href="#" target="_blank" rel="noopener">Donate with <i>PayPal</i></a>
-        </div>
-        <div class="card">
-          <h3>GitHub Sponsors</h3>
-          <p>Support Desfundo once or monthly. GitHub charges no fees on personal sponsorships.</p>
-          <iframe src="https://github.com/sponsors/fabbbb12/button" title="Sponsor fabbbb12" height="32" width="114" style="border: 0; border-radius: 6px; margin-top: 1rem;"></iframe>
-        </div>
+      <div class="card" style="margin-top: 1.5rem;">
+        <h3>Outras formas de ajudar</h3>
+        <p>Dê uma estrela no <a href="https://github.com/desfundo/desfundo">GitHub</a>, indique o Desfundo para quem vende online ou <a href="https://github.com/desfundo/desfundo/issues">reporte um problema</a>.</p>
       </div>
     </div>
   </section>
