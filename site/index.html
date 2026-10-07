@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Desfundo — remova o fundo de fotos de produto em massa, grátis e offline</title>
+  <meta name="description" content="Remova o fundo de centenas de fotos de produto de uma vez, direto no seu computador. Grátis, sem limite, sem marca d'água, offline e de código aberto." />
+  <meta property="og:title" content="Desfundo — remoção de fundo em massa, grátis e offline" />
+  <meta property="og:description" content="Grátis, sem limite, sem enviar suas fotos para a internet. Código aberto." />
+  <meta property="og:image" content="img/05-box-sem-fundo.png" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <style>
+    @font-face { font-family: 'Bricolage'; src: url(fonts/bricolage-grotesque-latin-opsz-normal.woff2) format('woff2'); font-weight: 200 800; font-display: swap; }
+    @font-face { font-family: 'Figtree'; src: url(fonts/figtree-latin-wght-normal.woff2) format('woff2'); font-weight: 300 900; font-display: swap; }
+    :root {
+      --ink: #0c100e; --ink-2: #141a17; --ink-3: #1c2420;
+      --paper: #e7e2d7; --paper-dim: #b9b3a6; --mint: #7ec8a3; --mint-deep: #4fa87c; --coral: #e07a5f;
+      --line: rgba(231, 226, 215, 0.12); --radius: 18px;
+      --display: 'Bricolage', Georgia, serif; --body: 'Figtree', system-ui, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--ink); color: var(--paper); font: 400 17px/1.65 var(--body); }
+    a { color: var(--mint); }
+    img { max-width: 100%; display: block; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+    @media (min-width: 720px) { .wrap { padding: 0 32px; } }
+    h1, h2, h3 { font-family: var(--display); line-height: 1.08; margin: 0; letter-spacing: -0.02em; }
+    h2 { font-size: clamp(1.9rem, 4.5vw, 2.8rem); margin-bottom: 0.6rem; }
+    h3 { font-size: 1.15rem; letter-spacing: -0.01em; }
+    section { padding: clamp(3.5rem, 8vw, 6rem) 0; border-top: 1px solid var(--line); }
+    .lede { color: var(--paper-dim); max-width: 46rem; margin: 0 0 2rem; }
+    .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.85rem 1.4rem; border-radius: 999px; font-weight: 600; text-decoration: none; border: 1px solid transparent; cursor: pointer; font: 600 1rem var(--body); }
+    .btn-primary { background: var(--mint); color: #0c1a13; }
+    .btn-primary:hover { background: #95d6b5; }
+    .btn-ghost { border-color: var(--line); color: var(--paper); background: transparent; }
+    .btn-ghost:hover { border-color: var(--paper-dim); }
+
+    nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--ink) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+    nav .wrap { display: flex; align-items: center; gap: 1.5rem; height: 60px; }
+    .logo { font: 800 1.35rem var(--display); color: var(--mint); text-decoration: none; letter-spacing: -0.03em; }
+    nav .links { display: none; gap: 1.25rem; margin-left: auto; }
+    nav .links a { color: var(--paper-dim); text-decoration: none; font-size: 0.95rem; }
+    nav .links a:hover { color: var(--paper); }
+    nav .btn { margin-left: auto; padding: 0.5rem 1rem; font-size: 0.9rem; }
+    @media (min-width: 860px) { nav .links { display: flex; } nav .btn { margin-left: 0; } }
+
+    .hero { padding: clamp(3rem, 9vw, 6.5rem) 0 clamp(3rem, 7vw, 5rem); border-top: 0; }
+    .hero-grid { display: grid; gap: 3rem; align-items: center; }
+    @media (min-width: 920px) { .hero-grid { grid-template-columns: 1.15fr 1fr; } }
+    .pills { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1.4rem; }
+    .pill { padding: 0.3rem 0.8rem; border-radius: 999px; border: 1px solid var(--line); color: var(--mint); font-size: 0.82rem; font-weight: 600; }
+    .hero h1 { font-size: clamp(2.5rem, 7vw, 4.4rem); margin-bottom: 1.2rem; }
+    .hero h1 em { font-style: normal; color: var(--mint); }
+    .hero .lede { font-size: 1.15rem; margin-bottom: 1.8rem; }
+    .cta { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+    .fine { margin-top: 0.9rem; color: var(--paper-dim); font-size: 0.85rem; }
+
+    .compare { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); user-select: none; }
+    .compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+    .compare .after { position: absolute; inset: 0; background: repeating-conic-gradient(#d9d6cf 0 25%, #f4f2ed 0 50%) 0 0 / 22px 22px; }
+    .compare .before-clip { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos, 50%)) 0 0); }
+    .compare .handle { position: absolute; top: 0; bottom: 0; left: var(--pos, 50%); width: 2px; background: var(--mint); transform: translateX(-1px); pointer-events: none; }
+    .compare .handle::after { content: '⇆'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border-radius: 50%; background: var(--mint); color: #0c1a13; display: grid; place-items: center; font-weight: 800; }
+    .compare input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
+    .tag { position: absolute; top: 12px; padding: 0.2rem 0.6rem; border-radius: 999px; background: rgba(12, 16, 14, 0.75); font-size: 0.75rem; font-weight: 600; }
+    .tag.l { left: 12px; } .tag.r { right: 12px; }
+    .thumbs { display: flex; gap: 0.5rem; margin-top: 0.8rem; justify-content: center; }
+    .thumbs button { width: 56px; height: 56px; padding: 0; border-radius: 10px; border: 1px solid var(--line); overflow: hidden; cursor: pointer; background: #f4f2ed; }
+    .thumbs button[aria-pressed='true'] { border-color: var(--mint); box-shadow: 0 0 0 2px var(--mint); }
+    .caption { text-align: center; color: var(--paper-dim); font-size: 0.8rem; margin-top: 0.6rem; }
+
+    .grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+    .card { background: var(--ink-2); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.4rem; }
+    .card .ico { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: color-mix(in srgb, var(--mint) 14%, transparent); color: var(--mint); margin-bottom: 0.9rem; }
+    .card .ico svg { width: 22px; height: 22px; }
+    .card p { margin: 0.4rem 0 0; color: var(--paper-dim); font-size: 0.95rem; }
+    .card.big { border-color: color-mix(in srgb, var(--mint) 45%, transparent); }
+
+    .calc { display: grid; gap: 1.5rem; }
+    @media (min-width: 860px) { .calc { grid-template-columns: 1fr 1.2fr; align-items: center; } }
+    .calc label { display: block; font-weight: 600; margin-bottom: 0.3rem; }
+    .calc output { color: var(--mint); font-weight: 700; }
+    .calc input[type=range] { width: 100%; accent-color: var(--mint); margin-bottom: 1.2rem; }
+    .bars { display: grid; gap: 1rem; }
+    .bar-row .lbl { display: flex; justify-content: space-between; font-size: 0.92rem; margin-bottom: 0.35rem; }
+    .bar { height: 14px; border-radius: 999px; background: var(--ink-3); overflow: hidden; }
+    .bar span { display: block; height: 100%; border-radius: 999px; transition: width 0.25s; }
+    .bar .online { background: var(--coral); }
+    .bar .local { background: var(--mint); }
+    .note { color: var(--paper-dim); font-size: 0.82rem; margin-top: 0.8rem; }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+    th, td { text-align: left; padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { font-family: var(--display); font-size: 1rem; }
+    td:nth-child(2) { color: var(--paper-dim); }
+    td:nth-child(3) { color: var(--mint); font-weight: 600; }
+    .table-wrap { overflow-x: auto; }
+
+    .steps { counter-reset: s; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+    .steps .card::before { counter-increment: s; content: counter(s); display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--mint); color: #0c1a13; font-weight: 800; margin-bottom: 0.8rem; }
+
+    .donate { display: grid; gap: 1.5rem; }
+    @media (min-width: 860px) { .donate { grid-template-columns: 1fr 1fr; } }
+    .pix { text-align: center; }
+    .pix img { width: 200px; height: 200px; margin: 1rem auto; border-radius: 10px; background: #fff; }
+    .pix .holder { padding: 0.6rem 0.8rem; border-radius: 10px; background: color-mix(in srgb, var(--mint) 12%, transparent); font-size: 0.88rem; margin: 0.8rem 0 0; color: var(--paper); }
+    .pix .key { font-size: 0.78rem; color: var(--paper-dim); word-break: break-all; margin-top: 0.8rem; }
+    .pix .btn { width: 100%; justify-content: center; margin-top: 0.4rem; }
+
+    details { border-bottom: 1px solid var(--line); padding: 1rem 0; }
+    summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
+    details p { color: var(--paper-dim); margin: 0.6rem 0 0; }
+
+    footer { border-top: 1px solid var(--line); padding: 2.5rem 0 3rem; color: var(--paper-dim); font-size: 0.88rem; }
+    footer p { margin: 0.3rem 0; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="wrap">
+      <a class="logo" href="#">Desfundo</a>
+      <div class="links">
+        <a href="#diferenciais">Diferenciais</a>
+        <a href="#economia">Economia</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#apoie">Apoie</a>
+        <a href="https://github.com/desfundo/desfundo">GitHub</a>
+      </div>
+      <a class="btn btn-primary" href="https://github.com/desfundo/desfundo/releases/latest">Baixar grátis</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <div class="pills">
+          <span class="pill">100% grátis</span><span class="pill">Código aberto</span><span class="pill">Offline</span><span class="pill">Sem cadastro</span>
+        </div>
+        <h1>Remova o fundo de <em>centenas</em> de fotos de produto de uma vez.</h1>
+        <p class="lede">Sem limite, sem marca d'água e sem enviar uma única foto para a internet. A inteligência artificial roda no seu próprio computador.</p>
+        <div class="cta">
+          <a class="btn btn-primary" href="https://github.com/desfundo/desfundo/releases/latest">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12m-5-5 5 5 5-5M5 20h14"/></svg>
+            Baixar para Windows
+          </a>
+          <a class="btn btn-ghost" href="https://github.com/desfundo/desfundo">Ver o código</a>
+        </div>
+        <p class="fine">Windows 10 e 11 (64 bits) · não precisa instalar · ~170 MB, com a IA embutida</p>
+      </div>
+      <div>
+        <div class="compare" id="compare">
+          <div class="after"><img id="cmp-after" src="img/05-box-sem-fundo.png" alt="Produto com o fundo removido" /></div>
+          <div class="before-clip"><img id="cmp-before" src="img/05-box.png" alt="Foto original do produto" /></div>
+          <div class="handle"></div>
+          <span class="tag l">Antes</span><span class="tag r">Depois</span>
+          <input type="range" min="0" max="100" value="50" aria-label="Comparar antes e depois" />
+        </div>
+        <div class="thumbs" id="thumbs">
+          <button type="button" aria-pressed="true" data-name="05-box" aria-label="Exemplo caixa"><img src="img/05-box.png" alt="" /></button>
+          <button type="button" aria-pressed="false" data-name="03-bottle" aria-label="Exemplo garrafa"><img src="img/03-bottle.png" alt="" /></button>
+          <button type="button" aria-pressed="false" data-name="07-thin-edges" aria-label="Exemplo bordas finas"><img src="img/07-thin-edges.png" alt="" /></button>
+        </div>
+        <p class="caption">Arraste para comparar. Resultados reais do Desfundo em imagens de teste.</p>
+      </div>
+    </div>
+  </header>
+
+  <section id="diferenciais">
+    <div class="wrap">
+      <h2>Por que o Desfundo é diferente</h2>
+      <p class="lede">Ferramentas online cobram por foto, reduzem a resolução e recebem suas imagens nos servidores delas. O Desfundo faz o contrário.</p>
+      <div class="grid">
+        <div class="card big">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 12v8H4v-8M2 7h20v5H2zM12 20V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div>
+          <h3>Grátis de verdade</h3>
+          <p>Sem limite de fotos, sem marca d'água, sem créditos e sem assinatura. Não existe versão "Pro".</p>
+        </div>
+        <div class="card big">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h3>Suas fotos não saem do PC</h3>
+          <p>Todo o processamento acontece no seu computador. Nenhuma imagem é enviada a servidor algum, nem para nós.</p>
+        </div>
+        <div class="card big">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6M8 6l-6 6 6 6"/></svg></div>
+          <h3>Código aberto</h3>
+          <p>Licença AGPL-3.0. Qualquer pessoa pode ler o código e conferir que ele faz exatamente o que promete.</p>
+        </div>
+        <div class="card big">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 5.2-2.8M19 13a10 10 0 0 0-2-1.5M2 8.8a15 15 0 0 1 4.2-2.7M22 8.8A15 15 0 0 0 10.7 5M12 20h.01"/></svg></div>
+          <h3>Funciona sem internet</h3>
+          <p>A IA vem dentro do app. Depois de baixar, funciona no avião, na feira ou com internet ruim.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v6M12 22v-6M4.9 4.9l4.2 4.2M19.1 19.1l-4.2-4.2M2 12h6M22 12h-6"/></svg></div>
+          <h3>Economia de banda</h3>
+          <p>Você baixa o app uma vez. Depois disso, cada foto gasta zero de internet: nada de upload e download.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+          <h3>Em massa, de verdade</h3>
+          <p>Solte quantas fotos quiser. Baixe as prontas, uma a uma ou em ZIP, enquanto o resto da fila continua.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h6"/></svg></div>
+          <h3>Catálogos em PDF</h3>
+          <p>Arraste um PDF: cada página vira uma foto na fila, pronta para recortar.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg></div>
+          <h3>Resolução original</h3>
+          <p>A foto sai no mesmo tamanho em que entrou. Nada de "versão grátis em baixa resolução".</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4zM3 6h18M16 10a4 4 0 0 1-8 0"/></svg></div>
+          <h3>Feito para foto de produto</h3>
+          <p>Retoque automático de bordas, anti-reflexo para embalagens plásticas e pincel para apagar ou restaurar detalhes.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg></div>
+          <h3>Ajustes por foto</h3>
+          <p>Rotação, espelho, brilho, contraste, corte das áreas vazias e fundo transparente, branco ou preto.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m4.9 4.9 14.2 14.2"/></svg></div>
+          <h3>Sem cadastro e sem anúncios</h3>
+          <p>Não pede e-mail, não mostra propaganda e não rastreia o que você faz.</p>
+        </div>
+        <div class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h9l-1 8 10-12h-9z"/></svg></div>
+          <h3>Portátil e rápido</h3>
+          <p>Um único arquivo, sem instalação. Usa todos os núcleos do processador e a tela não trava durante o processamento.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="economia">
+    <div class="wrap calc">
+      <div>
+        <h2>Quanto de internet você economiza</h2>
+        <p class="lede">Em serviços online, cada foto sobe para o servidor e o resultado desce de volta. No Desfundo, depois de baixar o app, nada trafega.</p>
+        <label for="n">Fotos por mês: <output id="n-out">300</output></label>
+        <input id="n" type="range" min="10" max="2000" step="10" value="300" />
+        <label for="mb">Tamanho médio de cada foto: <output id="mb-out">4</output> MB</label>
+        <input id="mb" type="range" min="1" max="15" step="1" value="4" />
+      </div>
+      <div class="card">
+        <div class="bars">
+          <div class="bar-row">
+            <div class="lbl"><span>Serviço online (envio + download)</span><strong id="online-out">2,4 GB</strong></div>
+            <div class="bar"><span class="online" id="online-bar" style="width:100%"></span></div>
+          </div>
+          <div class="bar-row">
+            <div class="lbl"><span>Desfundo, a partir do 2º mês</span><strong style="color:var(--mint)">0 MB</strong></div>
+            <div class="bar"><span class="local" style="width:0.5%"></span></div>
+          </div>
+          <div class="bar-row">
+            <div class="lbl"><span>Desfundo, download único do app</span><strong>~170 MB</strong></div>
+            <div class="bar"><span class="local" id="app-bar" style="width:7%"></span></div>
+          </div>
+        </div>
+        <p class="note">Estimativa: considera o envio da foto original e o download de um resultado de tamanho parecido. Valores reais variam por serviço e formato.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="comparativo">
+    <div class="wrap">
+      <h2>Desfundo x serviços online</h2>
+      <p class="lede">Comparação com o modelo mais comum de removedores de fundo na web.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th></th><th>Serviços online típicos</th><th>Desfundo</th></tr></thead>
+          <tbody>
+            <tr><td>Suas fotos vão para um servidor</td><td>Sim</td><td>Nunca</td></tr>
+            <tr><td>Limite no plano grátis</td><td>Poucos créditos ou resolução reduzida</td><td>Ilimitado, resolução original</td></tr>
+            <tr><td>Marca d'água</td><td>Comum no plano grátis</td><td>Nunca</td></tr>
+            <tr><td>Cadastro</td><td>Geralmente obrigatório</td><td>Não precisa</td></tr>
+            <tr><td>Funciona sem internet</td><td>Não</td><td>Sim</td></tr>
+            <tr><td>Internet gasta por foto</td><td>Envio + download</td><td>Zero</td></tr>
+            <tr><td>Código aberto</td><td>Raramente</td><td>Sim, AGPL-3.0</td></tr>
+            <tr><td>Custo</td><td>Assinatura ou créditos</td><td>Grátis</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="como-funciona">
+    <div class="wrap">
+      <h2>Como funciona</h2>
+      <p class="lede">Três passos, sem cadastro e sem configuração.</p>
+      <div class="steps">
+        <div class="card"><h3>Baixe e abra</h3><p>Baixe o arquivo para Windows e abra. Não precisa instalar nada.</p></div>
+        <div class="card"><h3>Solte as fotos</h3><p>Arraste quantas fotos quiser, ou um catálogo em PDF, e clique em "Remover fundos".</p></div>
+        <div class="card"><h3>Ajuste e baixe</h3><p>Retoque o que precisar e baixe em PNG transparente, com fundo branco ou preto, ou tudo em ZIP.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="apoie">
+    <div class="wrap">
+      <h2>Apoie o projeto</h2>
+      <p class="lede">O Desfundo é e continuará gratuito. Se ele economizou o seu tempo ou o seu dinheiro, considere apoiar o desenvolvimento. Qualquer valor ajuda.</p>
+      <div class="donate">
+        <div class="card pix">
+          <h3>Pix</h3>
+          <p class="holder">O Pix cai na conta de <strong>Fabricio</strong>, criador do Desfundo. É esse nome que o seu banco vai mostrar na confirmação.</p>
+          <img src="pix-qr.svg" alt="QR code Pix para doação" width="200" height="200" />
+          <button class="btn btn-primary" type="button" data-copy="00020101021126580014br.gov.bcb.pix0136de539899-0b61-484e-9e9f-eed74734be865204000053039865802BR5908DESFUNDO6006BRASIL62070503***6304CB23">Copiar Pix copia e cola</button>
+          <button class="btn btn-ghost" type="button" data-copy="de539899-0b61-484e-9e9f-eed74734be86">Copiar chave</button>
+          <p class="key">Chave aleatória: de539899-0b61-484e-9e9f-eed74734be86</p>
+        </div>
+        <div class="card">
+          <h3>GitHub Sponsors</h3>
+          <p>Para apoiar com cartão internacional, uma vez ou todo mês.</p>
+          <iframe src="https://github.com/sponsors/fabbbb12/button" title="Sponsor fabbbb12" height="32" width="114" style="border: 0; border-radius: 6px; margin-top: 1rem;"></iframe>
+          <h3 style="margin-top: 2rem;">Outras formas de ajudar</h3>
+          <p>Dê uma estrela no <a href="https://github.com/desfundo/desfundo">GitHub</a>, indique o Desfundo para quem vende online ou <a href="https://github.com/desfundo/desfundo/issues">reporte um problema</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="perguntas">
+    <div class="wrap">
+      <h2>Perguntas frequentes</h2>
+      <details><summary>É grátis mesmo? Qual é o truque?</summary><p>Não tem truque. O Desfundo é software livre e não tem plano pago, anúncios nem coleta de dados. O projeto se mantém com doações voluntárias.</p></details>
+      <details><summary>Minhas fotos vão para algum lugar?</summary><p>Não. Todo o processamento acontece no seu computador, e o app funciona até sem internet. Como o código é aberto, qualquer pessoa pode conferir isso.</p></details>
+      <details><summary>O Windows mostrou um aviso do SmartScreen. É seguro?</summary><p>O aviso aparece porque o executável ainda não tem uma assinatura digital paga, não porque haja algo errado. Clique em "Mais informações" e depois em "Executar assim mesmo". Se preferir, confira o código-fonte no GitHub antes.</p></details>
+      <details><summary>Posso usar as fotos na minha loja?</summary><p>Sim. As imagens que você gera são suas e podem ser usadas para qualquer fim, inclusive comercial. A licença AGPL-3.0 vale para o código do programa, não para as suas fotos.</p></details>
+      <details><summary>Funciona no Mac ou no Linux?</summary><p>Por enquanto, só no Windows 10 e 11 de 64 bits.</p></details>
+      <details><summary>Por que o download tem cerca de 170 MB?</summary><p>Porque o modelo de inteligência artificial vem dentro do app. É isso que permite funcionar offline e sem gastar internet a cada foto.</p></details>
+      <details><summary>Que tipo de computador eu preciso?</summary><p>Qualquer PC com Windows 10 ou 11 de 64 bits. Com mais núcleos de processador, o processamento fica mais rápido. Recomendamos 8 GB de memória para lotes grandes.</p></details>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p><strong style="color:var(--paper)">Desfundo</strong> é software livre sob a licença <a href="https://github.com/desfundo/desfundo/blob/main/LICENSE">AGPL-3.0</a>.</p>
+      <p>Motor de remoção de fundo: <a href="https://github.com/imgly/background-removal-js">IMG.LY background-removal</a> (AGPL-3.0). <a href="https://github.com/desfundo/desfundo/blob/main/THIRD_PARTY_NOTICES.md">Componentes de terceiros</a>.</p>
+      <p>Este site não usa cookies nem rastreadores.</p>
+    </div>
+  </footer>
+
+  <script>
+    const compare = document.getElementById('compare')
+    compare.querySelector('input').addEventListener('input', (e) => compare.style.setProperty('--pos', e.target.value + '%'))
+
+    document.querySelectorAll('#thumbs button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#thumbs button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)))
+        document.getElementById('cmp-before').src = 'img/' + btn.dataset.name + '.png'
+        document.getElementById('cmp-after').src = 'img/' + btn.dataset.name + '-sem-fundo.png'
+      })
+    })
+
+    const fmt = (mb) => mb >= 1000 ? (mb / 1000).toLocaleString('pt-BR', { maximumFractionDigits: 1 }) + ' GB' : Math.round(mb) + ' MB'
+    const n = document.getElementById('n'), mb = document.getElementById('mb')
+    const APP_MB = 170
+    function updateCalc() {
+      const online = Number(n.value) * Number(mb.value) * 2
+      document.getElementById('n-out').textContent = Number(n.value).toLocaleString('pt-BR')
+      document.getElementById('mb-out').textContent = mb.value
+      document.getElementById('online-out').textContent = fmt(online)
+      const max = Math.max(online, APP_MB)
+      document.getElementById('online-bar').style.width = (online / max) * 100 + '%'
+      document.getElementById('app-bar').style.width = Math.max(1, (APP_MB / max) * 100) + '%'
+    }
+    n.addEventListener('input', updateCalc); mb.addEventListener('input', updateCalc); updateCalc()
+
+    document.querySelectorAll('[data-copy]').forEach((btn) => {
+      const label = btn.textContent
+      btn.addEventListener('click', async () => {
+        try { await navigator.clipboard.writeText(btn.dataset.copy); btn.textContent = 'Copiado!' }
+        catch { btn.textContent = 'Não foi possível copiar' }
+        setTimeout(() => (btn.textContent = label), 2000)
+      })
+    })
+  </script>
+</body>
+</html>
