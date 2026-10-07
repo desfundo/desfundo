@@ -8,7 +8,20 @@ export const LICENSE_NAME = 'AGPL-3.0'
  * Donation channels. A link only shows up in the app once it has a `url`.
  * Pix: use a random key (chave aleatória) — whatever goes here is public.
  */
+/** PayPal account that receives donations (public on purpose — shown on the PayPal page). */
+const PAYPAL_ACCOUNT = 'fabricio.vale@live.com'
+
+const paypalDonateUrl =
+  'https://www.paypal.com/donate/?' +
+  new URLSearchParams({
+    business: PAYPAL_ACCOUNT,
+    currency_code: 'BRL',
+    item_name: 'Doação para o Desfundo',
+    no_recurring: '0',
+  })
+
 export const DONATE_LINKS: { label: string; url: string }[] = [
+  { label: 'PayPal', url: paypalDonateUrl },
   { label: 'GitHub Sponsors', url: 'https://github.com/sponsors/fabbbb12' },
 ]
 
