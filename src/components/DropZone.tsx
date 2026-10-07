@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState, type DragEvent, type KeyboardEvent } from 'react'
+import { useI18n } from '../i18n'
 
 interface DropZoneProps {
   onFiles: (files: FileList | File[]) => void
@@ -6,6 +7,7 @@ interface DropZoneProps {
 }
 
 export function DropZone({ onFiles, disabled }: DropZoneProps) {
+  const { m } = useI18n()
   const inputRef = useRef<HTMLInputElement>(null)
   const [dragging, setDragging] = useState(false)
 
@@ -67,10 +69,8 @@ export function DropZone({ onFiles, disabled }: DropZoneProps) {
           />
         </svg>
       </div>
-      <p className="dropzone-title">Solte imagens ou PDFs aqui</p>
-      <p className="dropzone-hint">
-        ou clique · PNG, JPG, WEBP, PDF · cada página do PDF vira uma foto na fila
-      </p>
+      <p className="dropzone-title">{m.dropTitle}</p>
+      <p className="dropzone-hint">{m.dropHint}</p>
     </div>
   )
 }

@@ -43,6 +43,7 @@ import {
 import { getProductionEngine } from '../lib/backgroundRemoval/createEngine'
 import { EngineStoppedError } from '../lib/backgroundRemoval/imglyEngine'
 import { isPdfFile } from '../lib/pdfPages'
+import { msg } from '../i18n'
 
 /** Terminates the inference worker; the in-flight job rejects and the next one starts a fresh worker. */
 function stopInference() {
@@ -51,9 +52,7 @@ function stopInference() {
 
 function confirmDiscardEdits(item: ProcessedImage | undefined): boolean {
   if (!item?.manuallyEdited) return true
-  return window.confirm(
-    `"${item.name}" tem edições manuais (borracha / anti-reflexo) que serão descartadas. Continuar?`,
-  )
+  return window.confirm(msg().confirmDiscardEdits(item.name))
 }
 
 function uid() {
@@ -151,7 +150,7 @@ export function useBatchProcessor() {
         const store = await getStore()
         const blob = await loadCurrentResult(store, item.resultRef)
         if (!blob) {
-          throw new Error('Resultado não encontrado no armazenamento local')
+          throw new Error(msg().resultNotFound)
         }
         const now = Date.now()
         setImages((cur) =>
@@ -332,7 +331,7 @@ export function useBatchProcessor() {
         // Cancelled / removed mid-inference: the engine was stopped on purpose.
         if (isStale()) return backToQueue()
         progressThrottleRef.current.cancel()
-        const message = err instanceof Error ? err.message : 'Erro ao processar'
+        const message = err instanceof Error ? err.message : msg().processFailed
         setImages((cur) =>
           cur.map((i) =>
             i.id === id
@@ -395,7 +394,7 @@ export function useBatchProcessor() {
       enqueueImages(imagesOnly)
       if (pdfs.length === 0) {
         if (imagesOnly.length === 0) {
-          setPdfStatus('Nenhum PNG/JPG/WEBP/BMP ou PDF reconhecido.')
+          setPdfStatus(msg().nothingRecognized)
         }
         return
       }
@@ -406,18 +405,16 @@ export function useBatchProcessor() {
           // pdf.js is large; load it only when a PDF actually arrives.
           const { pdfToPageFiles } = await import('../lib/pdfExpand')
           for (const pdf of pdfs) {
-            setPdfStatus(`Lendo ${pdf.name}…`)
+            setPdfStatus(msg().pdfReading(pdf.name))
             const pages = await pdfToPageFiles(pdf, (page, total) => {
-              setPdfStatus(`Lendo ${pdf.name}: página ${page}/${total}`)
+              setPdfStatus(msg().pdfReadingPage(pdf.name, page, total))
             })
             enqueueImages(pages)
-            setPdfStatus(
-              `${pdf.name}: ${pages.length} página${pages.length === 1 ? '' : 's'} na fila`,
-            )
+            setPdfStatus(msg().pdfQueued(pdf.name, pages.length))
           }
         } catch (error) {
           const message =
-            error instanceof Error ? error.message : 'Falha ao ler o PDF'
+            error instanceof Error ? error.message : msg().pdfFailed
           setPdfStatus(message)
         } finally {
           setIsExpandingPdf(false)
@@ -580,7 +577,7 @@ export function useBatchProcessor() {
         const store = await getStore()
         const base = await loadBaseResult(store, item.baseResultRef)
         if (!base) {
-          throw new Error('Base do retoque não encontrada no armazenamento local')
+          throw new Error(msg().retouchBaseNotFound)
         }
 
         const latest = imagesRef.current.find((i) => i.id === id) ?? item
@@ -608,7 +605,7 @@ export function useBatchProcessor() {
           }),
         )
       } catch (err) {
-        const message = err instanceof Error ? err.message : 'Erro no retoque'
+        const message = err instanceof Error ? err.message : msg().retouchFailed
         setImages((cur) =>
           cur.map((i) =>
             i.id === id ? { ...i, status: 'error', error: message } : i,

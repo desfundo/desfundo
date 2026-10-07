@@ -10,6 +10,7 @@ import { canvasToBlob, loadImage } from '../lib/imageProcessing'
 import { reducePlasticGlare } from '../lib/plasticFix'
 import { BackButton } from './BackButton'
 import { ZoomToolbar } from './ZoomToolbar'
+import { useI18n } from '../i18n'
 import type { ProcessedImage } from '../types'
 
 interface DehazeMaskModalProps {
@@ -27,6 +28,7 @@ export function DehazeMaskModal({
   onClose,
   onSave,
 }: DehazeMaskModalProps) {
+  const { m } = useI18n()
   const stageRef = useRef<HTMLDivElement>(null)
   const layerRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -466,7 +468,7 @@ export function DehazeMaskModal({
     mask.fill(0)
     setShowMask(true)
     paintCanvas()
-    setFlash('Máscara limpa')
+    setFlash(m.maskCleared)
     window.setTimeout(() => setFlash(null), 900)
   }
 
@@ -483,7 +485,7 @@ export function DehazeMaskModal({
     setDetectedColor(null)
     onSave(image.id, entry)
     paintCanvas()
-    setFlash('Restaurado')
+    setFlash(m.restored)
     window.setTimeout(() => setFlash(null), 1000)
   }
 
@@ -520,7 +522,7 @@ export function DehazeMaskModal({
       if (mask[i] > 8) covered++
     }
     if (covered === 0) {
-      window.alert('Pinte a área com reflexo/embaçamento antes de aplicar.')
+      window.alert(m.paintFirst)
       return
     }
 
@@ -544,12 +546,12 @@ export function DehazeMaskModal({
       setDetectedColor(color)
       onSave(image.id, result)
       paintCanvas()
-      setFlash('Reflexo corrigido + nitidez')
+      setFlash(m.glareFixed)
       window.setTimeout(() => setFlash(null), 1400)
     } catch (err) {
       console.error(err)
       window.alert(
-        err instanceof Error ? err.message : 'Falha ao aplicar anti-reflexo',
+        err instanceof Error ? err.message : m.antiGlareFailed,
       )
     } finally {
       setSaving(false)
@@ -567,19 +569,15 @@ export function DehazeMaskModal({
       className="eraser-modal"
       role="dialog"
       aria-modal="true"
-      aria-label="Selecionar área do anti-reflexo"
+      aria-label={m.antiGlareDialog}
     >
       <div className="eraser-panel">
         <header className="eraser-header">
           <div className="eraser-header-main">
             <BackButton onClick={onClose} />
             <div className="eraser-header-text">
-              <h2>Anti-reflexo + nitidez</h2>
-              <p>
-                Segure <strong>Ctrl</strong> + arraste para mover ·{' '}
-                <strong>Ctrl</strong> + scroll para zoom · scroll para o
-                tamanho do pincel.
-              </p>
+              <h2>{m.antiGlareHeading}</h2>
+              <p>{m.antiGlareHelp}</p>
             </div>
           </div>
         </header>
@@ -591,25 +589,25 @@ export function DehazeMaskModal({
               className={tool === 'paint' ? 'is-active' : ''}
               onClick={() => setTool('paint')}
             >
-              Pintar
+              {m.paint}
             </button>
             <button
               type="button"
               className={tool === 'erase' ? 'is-active' : ''}
               onClick={() => setTool('erase')}
             >
-              Apagar máscara
+              {m.eraseMask}
             </button>
             <button type="button" onClick={selectAll}>
-              Tudo
+              {m.selectAll}
             </button>
             <button type="button" onClick={handleLimpar}>
-              Limpar
+              {m.clear}
             </button>
           </div>
 
           <label className="eraser-brush">
-            <span>Pincel</span>
+            <span>{m.brush}</span>
             <input
               type="range"
               min={12}
@@ -621,7 +619,7 @@ export function DehazeMaskModal({
           </label>
 
           <label className="eraser-brush">
-            <span>Força</span>
+            <span>{m.force}</span>
             <input
               type="range"
               min={20}
@@ -634,7 +632,7 @@ export function DehazeMaskModal({
           </label>
 
           <label className="eraser-brush">
-            <span>Textura</span>
+            <span>{m.texture}</span>
             <input
               type="range"
               min={0}
@@ -662,11 +660,11 @@ export function DehazeMaskModal({
               checked={showMask}
               onChange={(e) => setShowMask(e.target.checked)}
             />
-            <span>Mostrar máscara</span>
+            <span>{m.showMask}</span>
           </label>
 
           {detectedColor && (
-            <div className="color-swatch" title="Cor média reconstituída">
+            <div className="color-swatch" title={m.averageColorTitle}>
               <span
                 className="color-swatch-chip"
                 style={{
@@ -674,7 +672,7 @@ export function DehazeMaskModal({
                 }}
               />
               <em>
-                Cor{' '}
+                {m.color}{' '}
                 {`#${[detectedColor.r, detectedColor.g, detectedColor.b]
                   .map((v) => v.toString(16).padStart(2, '0'))
                   .join('')}`}
@@ -690,7 +688,7 @@ export function DehazeMaskModal({
               onClick={() => void handleApply()}
               disabled={!ready || saving}
             >
-              {saving ? 'Aplicando…' : 'Aplicar na área'}
+              {saving ? m.applying : m.applyToArea}
             </button>
           </div>
         </div>
@@ -702,7 +700,7 @@ export function DehazeMaskModal({
           onPointerDown={onStagePointerDown}
           onContextMenu={(e) => e.preventDefault()}
         >
-          {!ready && <p className="eraser-loading">Carregando editor…</p>}
+          {!ready && <p className="eraser-loading">{m.loadingEditor}</p>}
           {flash && <p className="dehaze-flash">{flash}</p>}
 
           <div

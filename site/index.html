@@ -18,7 +18,7 @@
     // is not set to Portuguese. Only the browser's language is used: no location, no tracking.
     try {
       const chosen = localStorage.getItem('lang')
-      const browserPt = navigator.languages.some((l) => l.toLowerCase().startsWith('pt'))
+      const browserPt = (navigator.languages[0] || navigator.language || '').toLowerCase().startsWith('pt')
       if (chosen === 'en' || (!chosen && !browserPt)) location.replace('en/')
     } catch {}
   </script>

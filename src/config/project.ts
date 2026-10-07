@@ -1,29 +1,33 @@
 /** Public project links shown in the app footer. */
 
+import type { Lang } from '../i18n/messages'
+
 export const SOURCE_URL = 'https://github.com/desfundo/desfundo'
 
 export const LICENSE_NAME = 'AGPL-3.0'
 
-/**
- * Donation channels. A link only shows up in the app once it has a `url`.
- * Pix: use a random key (chave aleatória) — whatever goes here is public.
- */
 /** PayPal account that receives donations (public on purpose — shown on the PayPal page). */
 const PAYPAL_ACCOUNT = 'fabricio.vale@live.com'
 
-const paypalDonateUrl =
-  'https://www.paypal.com/donate/?' +
-  new URLSearchParams({
-    business: PAYPAL_ACCOUNT,
-    currency_code: 'BRL',
-    item_name: 'Doação para o Desfundo',
-    no_recurring: '0',
-  })
+function paypalDonateUrl(lang: Lang): string {
+  return (
+    'https://www.paypal.com/donate/?' +
+    new URLSearchParams({
+      business: PAYPAL_ACCOUNT,
+      currency_code: lang === 'pt' ? 'BRL' : 'USD',
+      item_name: lang === 'pt' ? 'Doação para o Desfundo' : 'Donation to Desfundo',
+      no_recurring: '0',
+    })
+  )
+}
 
-export const DONATE_LINKS: { label: string; url: string }[] = [
-  { label: 'PayPal', url: paypalDonateUrl },
-  { label: 'GitHub Sponsors', url: 'https://github.com/sponsors/fabbbb12' },
-]
+/** Footer donation links (Pix has its own dialog). PayPal in BRL for PT, USD for EN. */
+export function donateLinks(lang: Lang): { label: string; url: string }[] {
+  return [
+    { label: 'PayPal', url: paypalDonateUrl(lang) },
+    { label: 'GitHub Sponsors', url: 'https://github.com/sponsors/fabbbb12' },
+  ]
+}
 
 /**
  * Pix donation. Random key only (never CPF/phone/e-mail): this file is public.

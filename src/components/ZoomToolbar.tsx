@@ -1,3 +1,5 @@
+import { useI18n } from '../i18n'
+
 interface ZoomToolbarProps {
   zoom: number
   onZoomIn: () => void
@@ -11,20 +13,21 @@ export function ZoomToolbar({
   onZoomOut,
   onReset,
 }: ZoomToolbarProps) {
+  const { m } = useI18n()
   return (
     <div className="zoom-toolbar" role="group" aria-label="Zoom">
-      <button type="button" className="zoom-btn" onClick={onZoomOut} title="Diminuir">
+      <button type="button" className="zoom-btn" onClick={onZoomOut} title={m.zoomOut}>
         −
       </button>
       <button
         type="button"
         className="zoom-btn zoom-label"
         onClick={onReset}
-        title="Ajustar à tela"
+        title={m.zoomFit}
       >
         {Math.round(zoom * 100)}%
       </button>
-      <button type="button" className="zoom-btn" onClick={onZoomIn} title="Aumentar">
+      <button type="button" className="zoom-btn" onClick={onZoomIn} title={m.zoomIn}>
         +
       </button>
     </div>

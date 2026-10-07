@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react'
 import { PIX, PIX_HOLDER_FIRST_NAME } from '../config/project'
+import { useI18n } from '../i18n'
 import { buildPixPayload } from '../lib/pix'
 
 const PAYLOAD = buildPixPayload(PIX)
 
 /** Footer Pix donation: QR (public/pix-qr.svg, from `npm run pix:qr`) + copy buttons. */
 export function PixDonate() {
+  const { m } = useI18n()
   const dialogRef = useRef<HTMLDialogElement>(null)
   const [copied, setCopied] = useState<'payload' | 'key' | null>(null)
 
@@ -22,7 +24,7 @@ export function PixDonate() {
   return (
     <>
       <button type="button" className="link-button" onClick={() => dialogRef.current?.showModal()}>
-        Pix
+        {m.pix}
       </button>
       <dialog
         ref={dialogRef}
@@ -32,24 +34,25 @@ export function PixDonate() {
           if (e.target === dialogRef.current) dialogRef.current.close()
         }}
       >
-        <h2>Apoie com Pix</h2>
+        <h2>{m.pixTitle}</h2>
         <p className="pix-holder">
-          O Pix cai na conta de <strong>{PIX_HOLDER_FIRST_NAME}</strong>, criador do Desfundo.
-          É esse nome que o seu banco vai mostrar na confirmação.
+          {m.pixHolderBefore}
+          <strong>{PIX_HOLDER_FIRST_NAME}</strong>
+          {m.pixHolderAfter}
         </p>
-        <p>Qualquer valor ajuda. Escaneie com o app do seu banco:</p>
-        <img src="./pix-qr.svg" alt="QR code Pix para doação" width={220} height={220} />
+        <p>{m.pixAnyAmount}</p>
+        <img src="./pix-qr.svg" alt={m.pixQrAlt} width={220} height={220} />
         <div className="pix-actions">
           <button type="button" className="btn btn-primary" onClick={() => void copy('payload')}>
-            {copied === 'payload' ? 'Copiado!' : 'Copiar Pix copia e cola'}
+            {copied === 'payload' ? m.copiedPayload : m.copyPayload}
           </button>
           <button type="button" className="btn btn-secondary" onClick={() => void copy('key')}>
-            {copied === 'key' ? 'Copiada!' : 'Copiar chave'}
+            {copied === 'key' ? m.copiedKey : m.copyKey}
           </button>
         </div>
-        <p className="pix-key">Chave aleatória: {PIX.key}</p>
+        <p className="pix-key">{m.randomKey(PIX.key)}</p>
         <button type="button" className="btn btn-ghost" onClick={() => dialogRef.current?.close()}>
-          Fechar
+          {m.close}
         </button>
       </dialog>
     </>

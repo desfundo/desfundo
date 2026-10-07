@@ -1,5 +1,6 @@
 import type { FillBackground, ImageSettings, ProcessOptions } from '../types'
 import { getProductionEngine } from './backgroundRemoval/createEngine'
+import { msg } from '../i18n'
 
 export function loadImage(source: Blob | string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
@@ -11,7 +12,7 @@ export function loadImage(source: Blob | string): Promise<HTMLImageElement> {
     }
     img.onerror = () => {
       if (typeof source !== 'string') URL.revokeObjectURL(url)
-      reject(new Error('Falha ao carregar imagem'))
+      reject(new Error(msg().imageLoadFailed))
     }
     img.src = url
   })
@@ -24,7 +25,7 @@ export function canvasToBlob(
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (blob) resolve(blob)
-      else reject(new Error('Falha ao exportar imagem'))
+      else reject(new Error(msg().imageExportFailed))
     }, type)
   })
 }
@@ -39,7 +40,7 @@ export async function autoRetouch(
   canvas.width = img.width
   canvas.height = img.height
   const ctx = canvas.getContext('2d', { willReadFrequently: true })
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
 
   ctx.drawImage(img, 0, 0)
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -126,7 +127,7 @@ export async function rotateImage(input: Blob, degrees: number): Promise<Blob> {
   canvas.width = width
   canvas.height = height
   const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
 
   ctx.clearRect(0, 0, width, height)
   ctx.translate(width / 2, height / 2)
@@ -147,7 +148,7 @@ export async function flipImage(
   canvas.width = img.width
   canvas.height = img.height
   const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
 
   ctx.translate(flipH ? img.width : 0, flipV ? img.height : 0)
   ctx.scale(flipH ? -1 : 1, flipV ? -1 : 1)
@@ -166,7 +167,7 @@ export async function adjustBrightnessContrast(
   canvas.width = img.width
   canvas.height = img.height
   const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
 
   // Same CSS filter the card preview uses, so the download matches what was seen.
   ctx.filter = brightnessContrastFilter(brightness, contrast)
@@ -183,7 +184,7 @@ export async function trimTransparent(
   canvas.width = img.width
   canvas.height = img.height
   const ctx = canvas.getContext('2d', { willReadFrequently: true })
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
 
   ctx.drawImage(img, 0, 0)
   const { data, width, height } = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -220,7 +221,7 @@ export async function trimTransparent(
   out.width = tw
   out.height = th
   const octx = out.getContext('2d')
-  if (!octx) throw new Error('Canvas indisponível')
+  if (!octx) throw new Error(msg().canvasUnavailable)
   octx.drawImage(canvas, left, top, tw, th, 0, 0, tw, th)
   return canvasToBlob(out)
 }
@@ -234,7 +235,7 @@ export async function scaleImage(input: Blob, scale: number): Promise<Blob> {
   canvas.width = Math.max(1, Math.round(img.width * s))
   canvas.height = Math.max(1, Math.round(img.height * s))
   const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
   ctx.imageSmoothingEnabled = true
   ctx.imageSmoothingQuality = 'high'
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
@@ -260,7 +261,7 @@ export async function applyBackgroundFill(
   canvas.width = img.width
   canvas.height = img.height
   const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
   ctx.fillStyle = color
   ctx.fillRect(0, 0, canvas.width, canvas.height)
   ctx.drawImage(img, 0, 0)
@@ -322,7 +323,7 @@ async function padImage(input: Blob, padding: number): Promise<Blob> {
   canvas.width = img.width + pad * 2
   canvas.height = img.height + pad * 2
   const ctx = canvas.getContext('2d')
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   ctx.drawImage(img, pad, pad)
   return canvasToBlob(canvas)

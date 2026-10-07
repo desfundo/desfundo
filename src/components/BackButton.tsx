@@ -1,9 +1,13 @@
+import { useI18n } from '../i18n'
+
 interface BackButtonProps {
   onClick: () => void
   label?: string
 }
 
-export function BackButton({ onClick, label = 'Voltar' }: BackButtonProps) {
+export function BackButton({ onClick, label: customLabel }: BackButtonProps) {
+  const { m } = useI18n()
+  const label = customLabel ?? m.back
   return (
     <button
       type="button"

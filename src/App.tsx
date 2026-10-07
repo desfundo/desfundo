@@ -5,7 +5,8 @@ import { DehazeMaskModal } from './components/DehazeMaskModal'
 import { EraserModal } from './components/EraserModal'
 import { VirtualImageGallery } from './components/VirtualImageGallery'
 import { useBatchProcessor } from './hooks/useBatchProcessor'
-import { CREDITS, DONATE_LINKS, LICENSE_NAME, SOURCE_URL } from './config/project'
+import { CREDITS, donateLinks, LICENSE_NAME, SOURCE_URL } from './config/project'
+import { useI18n } from './i18n'
 import { downloadAll, downloadOne } from './lib/download'
 import type { ProcessedImage } from './types'
 import './App.css'
@@ -15,6 +16,7 @@ type ActiveEditor =
   | { id: string; kind: 'dehaze' }
 
 export default function App() {
+  const { m, lang, setLang } = useI18n()
   const {
     images,
     isProcessing,
@@ -110,18 +112,15 @@ export default function App() {
         )
         if (report.failed.length > 0) {
           const names = report.failed.slice(0, 5).join(', ')
-          const more = report.failed.length > 5 ? ` e mais ${report.failed.length - 5}` : ''
-          setZipNotice(
-            `${report.exported} exportada(s). Não foi possível exportar: ${names}${more}.`,
-          )
+          setZipNotice(m.zipPartial(report.exported, names, Math.max(0, report.failed.length - 5)))
         }
       } catch (error) {
-        setZipNotice(error instanceof Error ? error.message : 'Falha ao gerar o ZIP')
+        setZipNotice(error instanceof Error ? error.message : m.zipFailed)
       } finally {
         setZipProgress(null)
       }
     })()
-  }, [images, resultAccess])
+  }, [images, resultAccess, m])
 
   return (
     <div className="app">
@@ -130,11 +129,8 @@ export default function App() {
 
       <header className="hero">
         <p className="brand">Desfundo</p>
-        <h1>Remova o fundo de dezenas de imagens de uma vez.</h1>
-        <p className="lede">
-          Retoque, rotação, espelho, brilho e fundo — tudo ajustável por foto,
-          direto no navegador.
-        </p>
+        <h1>{m.heroTitle}</h1>
+        <p className="lede">{m.heroLede}</p>
       </header>
 
       <main className="workspace">
@@ -144,13 +140,13 @@ export default function App() {
         />
         {pdfStatus && (
           <p className="pdf-status" role="status">
-            {isExpandingPdf ? 'Abrindo PDF… ' : ''}
+            {isExpandingPdf ? m.pdfOpening : ''}
             {pdfStatus}
           </p>
         )}
 
         {images.length > 0 && (
-          <section className="controls" aria-label="Padrão para novas imagens">
+          <section className="controls" aria-label={m.controlsLabel}>
             <div className="control-group">
               <label className="toggle">
                 <input
@@ -161,16 +157,14 @@ export default function App() {
                 />
                 <span className="toggle-ui" />
                 <span className="toggle-text">
-                  <strong>Retoque padrão (novas fotos)</strong>
-                  <small>
-                    Cada imagem tem o próprio retoque; isto só define o inicial
-                  </small>
+                  <strong>{m.defaultRetouch}</strong>
+                  <small>{m.defaultRetouchHint}</small>
                 </span>
               </label>
 
               {defaultAutoRetouch && (
                 <label className="strength">
-                  <span>Intensidade padrão</span>
+                  <span>{m.defaultStrength}</span>
                   <div className="strength-row">
                     <input
                       type="range"
@@ -194,18 +188,13 @@ export default function App() {
                 disabled={isProcessing || images.length === 0}
                 onClick={applyDefaultsToAll}
               >
-                Aplicar padrão a todas
+                {m.applyDefaultsToAll}
               </button>
             </div>
 
             <div className="control-actions">
               <p className="batch-meta">
-                {images.length} {images.length === 1 ? 'imagem' : 'imagens'}
-                {doneCount > 0 &&
-                  ` · ${doneCount} pronta${doneCount === 1 ? '' : 's'}`}
-                {pending > 0 &&
-                  ` · ${pending} pendente${pending === 1 ? '' : 's'}`}
-                {isProcessing && ' · processando…'}
+                {m.batchMeta(images.length, doneCount, pending, isProcessing)}
               </p>
 
               <div className="btn-row">
@@ -217,8 +206,8 @@ export default function App() {
                     disabled={images.length === 0}
                   >
                     {doneCount > 0 && pending > 0
-                      ? 'Processar pendentes'
-                      : 'Remover fundos'}
+                      ? m.processPending
+                      : m.removeBackgrounds}
                   </button>
                 ) : (
                   <button
@@ -226,7 +215,7 @@ export default function App() {
                     className="btn btn-secondary"
                     onClick={cancel}
                   >
-                    Cancelar fila
+                    {m.cancelQueue}
                   </button>
                 )}
 
@@ -237,17 +226,17 @@ export default function App() {
                   disabled={doneCount === 0 || zipProgress !== null}
                   title={
                     doneCount === 0
-                      ? 'Nenhuma imagem pronta ainda'
+                      ? m.noneReady
                       : isProcessing
-                        ? 'Baixa só as já concluídas; a fila continua'
+                        ? m.downloadWhileRunning
                         : undefined
                   }
                 >
                   {zipProgress
-                    ? `Gerando ZIP… ${zipProgress.done}/${zipProgress.total}`
+                    ? m.zipProgress(zipProgress.done, zipProgress.total)
                     : doneCount <= 1
-                      ? 'Baixar concluídas'
-                      : `Baixar concluídas (${doneCount} · ZIP)`}
+                      ? m.downloadDone
+                      : m.downloadDoneZip(doneCount)}
                 </button>
 
                 <button
@@ -255,7 +244,7 @@ export default function App() {
                   className="btn btn-ghost"
                   onClick={clearAll}
                 >
-                  Limpar
+                  {m.clear}
                 </button>
               </div>
             </div>
@@ -285,14 +274,11 @@ export default function App() {
       </main>
 
       <footer className="foot">
-        <p>
-          Tudo roda no seu computador — as imagens não são enviadas a nenhum
-          servidor.
-        </p>
+        <p>{m.footerPrivacy}</p>
         <p className="foot-donate">
-          Desfundo é gratuito. Se ele te ajudou, apoie o projeto:{' '}
+          {m.footerSupport}{' '}
           <PixDonate />
-          {DONATE_LINKS.map((link) => (
+          {donateLinks(lang).map((link) => (
             <span key={link.url}>
               {' · '}
               <a href={link.url} target="_blank" rel="noreferrer">
@@ -302,15 +288,15 @@ export default function App() {
           ))}
         </p>
         <details className="foot-about">
-          <summary>Sobre e licenças</summary>
+          <summary>{m.aboutLicenses}</summary>
           <p>
-            Software livre sob a licença {LICENSE_NAME}. Código-fonte:{' '}
+            {m.freeSoftware(LICENSE_NAME)}{' '}
             <a href={SOURCE_URL} target="_blank" rel="noreferrer">
               {SOURCE_URL.replace('https://', '')}
             </a>
           </p>
           <p>
-            Feito com{' '}
+            {m.madeWith}{' '}
             {CREDITS.map((c, i) => (
               <span key={c.name}>
                 {i > 0 && ', '}
@@ -320,9 +306,21 @@ export default function App() {
                 ({c.license})
               </span>
             ))}
-            . Lista completa em THIRD_PARTY_NOTICES.md no repositório.
+            {m.fullList}
           </p>
         </details>
+        <div className="lang-switch" role="group" aria-label={m.langLabel}>
+          {(['pt', 'en'] as const).map((code) => (
+            <button
+              key={code}
+              type="button"
+              aria-pressed={lang === code}
+              onClick={() => setLang(code)}
+            >
+              {code.toUpperCase()}
+            </button>
+          ))}
+        </div>
       </footer>
 
       {activeEditor?.kind === 'eraser' && editingImage?.resultBlob && (

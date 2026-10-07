@@ -14,6 +14,7 @@ import {
 } from '../hooks/useEditorViewport'
 import { BackButton } from './BackButton'
 import { ZoomToolbar } from './ZoomToolbar'
+import { useI18n } from '../i18n'
 import type { ProcessedImage } from '../types'
 
 interface EraserModalProps {
@@ -23,6 +24,7 @@ interface EraserModalProps {
 }
 
 export function EraserModal({ image, onClose, onSave }: EraserModalProps) {
+  const { m } = useI18n()
   const wrapRef = useRef<HTMLDivElement>(null)
   const displayRef = useRef<HTMLCanvasElement>(null)
   const workRef = useRef<HTMLCanvasElement | null>(null)
@@ -342,18 +344,14 @@ export function EraserModal({ image, onClose, onSave }: EraserModalProps) {
       : brushSize
 
   return (
-    <div className="eraser-modal" role="dialog" aria-modal="true" aria-label="Borracha">
+    <div className="eraser-modal" role="dialog" aria-modal="true" aria-label={m.eraser}>
       <div className="eraser-panel">
         <header className="eraser-header">
           <div className="eraser-header-main">
             <BackButton onClick={onClose} />
             <div className="eraser-header-text">
-              <h2>Borracha</h2>
-              <p>
-                <strong>Restaurar</strong> / <strong>Remover</strong> · scroll
-                no tamanho do pincel · <strong>Ctrl</strong> + arraste para
-                mover · <strong>Ctrl</strong> + scroll para zoom.
-              </p>
+              <h2>{m.eraser}</h2>
+              <p>{m.eraserHelp}</p>
             </div>
           </div>
         </header>
@@ -364,22 +362,22 @@ export function EraserModal({ image, onClose, onSave }: EraserModalProps) {
               type="button"
               className={mode === 'restore' ? 'is-active' : ''}
               onClick={() => setMode('restore')}
-              title="Restaurar (R)"
+              title={m.restoreKey}
             >
-              Restaurar
+              {m.restore}
             </button>
             <button
               type="button"
               className={mode === 'erase' ? 'is-active' : ''}
               onClick={() => setMode('erase')}
-              title="Remover (E)"
+              title={m.eraseKey}
             >
-              Remover
+              {m.remove}
             </button>
           </div>
 
           <label className="eraser-brush">
-            <span>Tamanho</span>
+            <span>{m.size}</span>
             <input
               type="range"
               min={8}
@@ -405,7 +403,7 @@ export function EraserModal({ image, onClose, onSave }: EraserModalProps) {
               onClick={() => void handleSave()}
               disabled={!ready || saving}
             >
-              {saving ? 'Salvando…' : 'Aplicar'}
+              {saving ? m.saving : m.apply}
             </button>
           </div>
         </div>
@@ -415,7 +413,7 @@ export function EraserModal({ image, onClose, onSave }: EraserModalProps) {
           ref={wrapRef}
           onWheel={onWheel}
         >
-          {!ready && <p className="eraser-loading">Carregando editor…</p>}
+          {!ready && <p className="eraser-loading">{m.loadingEditor}</p>}
           <div className="eraser-canvas-wrap is-fill">
             <canvas
               ref={displayRef}

@@ -20,7 +20,7 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "test": "tsx --test src/lib/batchScheduler.test.ts src/lib/progressThrottle.test.ts src/lib/resultStore.test.ts src/lib/baseResultRetention.test.ts src/lib/currentResultRetention.test.ts src/lib/backgroundRemoval/engine.test.ts src/lib/pdfPages.test.ts src/lib/zipNames.test.ts src/lib/pix.test.ts",
+    "test": "tsx --test src/lib/batchScheduler.test.ts src/lib/progressThrottle.test.ts src/lib/resultStore.test.ts src/lib/baseResultRetention.test.ts src/lib/currentResultRetention.test.ts src/lib/backgroundRemoval/engine.test.ts src/lib/pdfPages.test.ts src/lib/zipNames.test.ts src/lib/pix.test.ts src/i18n/messages.test.ts",
     "electron": "electron .",
     "desktop": "npm run build && electron .",
     "dist:win": "npm run build && electron-builder --win portable --x64"

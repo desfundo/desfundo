@@ -5,6 +5,7 @@ import type {
 import { validateInputBlob } from './preprocess'
 import { assertPngBlob } from './postprocess'
 import type { WorkerRequest, WorkerResponse } from './imgly.worker'
+import { msg as messages } from '../../i18n'
 
 /** Model + ONNX runtime are bundled under public/imgly/ (npm run imgly:data) — no CDN at runtime. */
 function localPublicPath(): string {
@@ -58,7 +59,7 @@ export function createImglyEngine(): BackgroundRemovalEngine {
     }
     worker.onerror = (event) => {
       event.preventDefault()
-      failAll(new Error(event.message || 'Falha no worker de remoção de fundo'))
+      failAll(new Error(event.message || messages().workerFailed))
     }
     return worker
   }

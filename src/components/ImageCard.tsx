@@ -3,6 +3,8 @@ import { usePreviewUrl } from '../hooks/usePreviewUrl'
 import type { FillBackground, ImageSettings, ProcessedImage } from '../types'
 import { previewFilter, previewTransform } from '../lib/imageProcessing'
 import { ZoomToolbar } from './ZoomToolbar'
+import { useI18n } from '../i18n'
+import type { Messages } from '../i18n/messages'
 
 interface ImageCardProps {
   image: ProcessedImage
@@ -25,10 +27,10 @@ interface ImageCardProps {
 }
 
 const PRESETS = [-90, 0, 90, 180] as const
-const BACKGROUNDS: { id: FillBackground; label: string }[] = [
-  { id: 'transparent', label: 'Transp.' },
-  { id: 'white', label: 'Branco' },
-  { id: 'black', label: 'Preto' },
+const BACKGROUNDS: { id: FillBackground; label: (m: Messages) => string }[] = [
+  { id: 'transparent', label: (m) => m.bgTransparent },
+  { id: 'white', label: (m) => m.bgWhite },
+  { id: 'black', label: (m) => m.bgBlack },
 ]
 
 export function ImageCard({
@@ -46,6 +48,7 @@ export function ImageCard({
   onUnpinResult,
   onDownload,
 }: ImageCardProps) {
+  const { m } = useI18n()
   const [open, setOpen] = useState(false)
   const [viewZoom, setViewZoom] = useState(1)
   const [pan, setPan] = useState({ x: 0, y: 0 })
@@ -176,13 +179,13 @@ export function ImageCard({
           )}
 
           {image.status === 'queued' && (
-            <div className="image-card-badge">Na fila</div>
+            <div className="image-card-badge">{m.statusQueued}</div>
           )}
           {image.status === 'error' && (
-            <div className="image-card-badge is-error">Erro</div>
+            <div className="image-card-badge is-error">{m.statusError}</div>
           )}
           {image.status === 'done' && (
-            <div className="image-card-badge is-done">Pronto</div>
+            <div className="image-card-badge is-done">{m.statusDone}</div>
           )}
         </div>
 
@@ -200,11 +203,11 @@ export function ImageCard({
                 disabled={itemProcessing}
                 onChange={(e) => patch({ autoRetouch: e.target.checked })}
               />
-              <span>Retoque automático</span>
+              <span>{m.autoRetouch}</span>
             </label>
             {settings.autoRetouch && (
               <label className="mini-slider">
-                <span>Intensidade</span>
+                <span>{m.strength}</span>
                 <input
                   type="range"
                   min={0.2}
@@ -224,9 +227,9 @@ export function ImageCard({
                 type="button"
                 className="btn btn-ghost btn-compact"
                 onClick={() => void onReapplyRetouch(image.id)}
-                title="Aplicar retoque atual no resultado (sem nova remoção de fundo)"
+                title={m.reapplyRetouchTitle}
               >
-                Reaplicar retoque
+                {m.reapplyRetouch}
               </button>
             )}
           </div>
@@ -238,14 +241,14 @@ export function ImageCard({
                 className={`adjust-toggle ${open ? 'is-open' : ''}`}
                 onClick={() => setOpen((v) => !v)}
               >
-                Ajustes da imagem
+                {m.imageAdjustments}
                 <span aria-hidden>{open ? '−' : '+'}</span>
               </button>
 
               {open && (
                 <div className="adjust-panel">
                   <div className="adjust-block">
-                    <span className="rotation-label">Rotação</span>
+                    <span className="rotation-label">{m.rotation}</span>
                     <div className="rotation-presets">
                       {PRESETS.map((deg) => (
                         <button
@@ -277,28 +280,28 @@ export function ImageCard({
                   </div>
 
                   <div className="adjust-block">
-                    <span className="rotation-label">Espelhar</span>
+                    <span className="rotation-label">{m.mirror}</span>
                     <div className="chip-row">
                       <button
                         type="button"
                         className={settings.flipH ? 'is-active' : ''}
                         onClick={() => patch({ flipH: !settings.flipH })}
                       >
-                        Horizontal
+                        {m.horizontal}
                       </button>
                       <button
                         type="button"
                         className={settings.flipV ? 'is-active' : ''}
                         onClick={() => patch({ flipV: !settings.flipV })}
                       >
-                        Vertical
+                        {m.vertical}
                       </button>
                     </div>
                   </div>
 
                   <div className="adjust-block">
                     <label className="mini-slider">
-                      <span>Brilho</span>
+                      <span>{m.brightness}</span>
                       <input
                         type="range"
                         min={-40}
@@ -311,7 +314,7 @@ export function ImageCard({
                       <em>{settings.brightness}</em>
                     </label>
                     <label className="mini-slider">
-                      <span>Contraste</span>
+                      <span>{m.contrast}</span>
                       <input
                         type="range"
                         min={-40}
@@ -323,8 +326,8 @@ export function ImageCard({
                       />
                       <em>{settings.contrast}</em>
                     </label>
-                    <label className="mini-slider" title="Tamanho no arquivo baixado (não é zoom da prévia)">
-                      <span>Tam. export</span>
+                    <label className="mini-slider" title={m.exportSizeTitle}>
+                      <span>{m.exportSize}</span>
                       <input
                         type="range"
                         min={0.5}
@@ -337,8 +340,8 @@ export function ImageCard({
                       />
                       <em>{Math.round(settings.scale * 100)}%</em>
                     </label>
-                    <label className="mini-slider" title="Intensidade do anti-reflexo na área pintada">
-                      <span>Anti-reflexo</span>
+                    <label className="mini-slider" title={m.antiGlareTitle}>
+                      <span>{m.antiGlare}</span>
                       <input
                         type="range"
                         min={10}
@@ -356,10 +359,10 @@ export function ImageCard({
                       className="btn btn-secondary btn-compact"
                       onClick={() => onOpenDehaze(image.id)}
                     >
-                      Selecionar área
+                      {m.selectArea}
                     </button>
                     <p className="adjust-hint">
-                      Pinte só a região com plástico/reflexo e aplique o efeito.
+                      {m.antiGlareHint}
                     </p>
                   </div>
 
@@ -372,10 +375,10 @@ export function ImageCard({
                           patch({ trimTransparent: e.target.checked })
                         }
                       />
-                      <span>Recortar áreas vazias</span>
+                      <span>{m.trimEmpty}</span>
                     </label>
                     <label className="mini-slider">
-                      <span>Margem</span>
+                      <span>{m.margin}</span>
                       <input
                         type="range"
                         min={0}
@@ -391,7 +394,7 @@ export function ImageCard({
                   </div>
 
                   <div className="adjust-block">
-                    <span className="rotation-label">Fundo na exportação</span>
+                    <span className="rotation-label">{m.exportBackground}</span>
                     <div className="chip-row">
                       {BACKGROUNDS.map((bg) => (
                         <button
@@ -402,7 +405,7 @@ export function ImageCard({
                           }
                           onClick={() => patch({ background: bg.id })}
                         >
-                          {bg.label}
+                          {bg.label(m)}
                         </button>
                       ))}
                     </div>
@@ -426,7 +429,7 @@ export function ImageCard({
                       })
                     }
                   >
-                    Resetar ajustes
+                    {m.resetAdjustments}
                   </button>
                 </div>
               )}
@@ -440,33 +443,33 @@ export function ImageCard({
                   type="button"
                   className="btn btn-ghost"
                   onClick={() => onOpenEraser(image.id)}
-                  title="Remover ou restaurar partes da imagem"
+                  title={m.eraserTitle}
                 >
-                  Borracha
+                  {m.eraser}
                 </button>
                 <button
                   type="button"
                   className="btn btn-ghost"
                   onClick={() => onRestoreOriginal(image.id)}
-                  title="Restaura a foto enviada, sem remoção de fundo"
+                  title={m.originalTitle}
                 >
-                  Original
+                  {m.original}
                 </button>
                 <button
                   type="button"
                   className="btn btn-ghost"
                   onClick={() => void onReprocess(image.id)}
-                  title="Rodar remoção de fundo de novo"
+                  title={m.reprocessTitle}
                 >
-                  Reprocessar
+                  {m.reprocess}
                 </button>
                 <button
                   type="button"
                   className="btn btn-ghost"
                   onClick={() => onDownload(image)}
-                  title="Baixar PNG desta imagem agora"
+                  title={m.downloadTitle}
                 >
-                  Baixar
+                  {m.download}
                 </button>
               </>
             )}
@@ -478,11 +481,11 @@ export function ImageCard({
                 onClick={() => void onReprocess(image.id)}
                 title={
                   batchRunning
-                    ? 'Aguarde a fila ou cancele para processar esta imagem à parte'
+                    ? m.processWaitTitle
                     : undefined
                 }
               >
-                Processar
+                {m.process}
               </button>
             )}
             <button
@@ -492,11 +495,11 @@ export function ImageCard({
               onClick={() => onRemove(image.id)}
               title={
                 itemProcessing
-                  ? 'Não é possível remover enquanto esta imagem processa'
+                  ? m.removeBusyTitle
                   : undefined
               }
             >
-              Remover
+              {m.remove}
             </button>
           </div>
         </div>

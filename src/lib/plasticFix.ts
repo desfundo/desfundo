@@ -1,3 +1,5 @@
+import { msg } from '../i18n'
+
 export interface PlasticFixResult {
   blob: Blob
   color: { r: number; g: number; b: number }
@@ -13,7 +15,7 @@ function loadImage(source: Blob | string | File): Promise<HTMLImageElement> {
     }
     img.onerror = () => {
       if (typeof source !== 'string') URL.revokeObjectURL(url)
-      reject(new Error('Falha ao carregar imagem'))
+      reject(new Error(msg().imageLoadFailed))
     }
     img.src = url
   })
@@ -26,7 +28,7 @@ function canvasToBlob(
   return new Promise((resolve, reject) => {
     canvas.toBlob((blob) => {
       if (blob) resolve(blob)
-      else reject(new Error('Falha ao exportar imagem'))
+      else reject(new Error(msg().imageExportFailed))
     }, type)
   })
 }
@@ -74,7 +76,7 @@ export async function reducePlasticGlare(
   canvas.width = width
   canvas.height = height
   const ctx = canvas.getContext('2d', { willReadFrequently: true })
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
 
   ctx.drawImage(img, 0, 0)
   const srcData = ctx.getImageData(0, 0, width, height)
@@ -253,7 +255,7 @@ export async function sharpenImage(
   canvas.width = width
   canvas.height = height
   const ctx = canvas.getContext('2d', { willReadFrequently: true })
-  if (!ctx) throw new Error('Canvas indisponível')
+  if (!ctx) throw new Error(msg().canvasUnavailable)
   ctx.drawImage(img, 0, 0)
   const data = ctx.getImageData(0, 0, width, height)
   const original = new Uint8ClampedArray(data.data)
@@ -505,3 +507,4 @@ function softMask(
 
   return out
 }
+

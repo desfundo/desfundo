@@ -8,6 +8,7 @@ import {
 import { useWindowVirtualizer } from '@tanstack/react-virtual'
 import type { ImageSettings, ProcessedImage } from '../types'
 import { ImageCard } from './ImageCard'
+import { useI18n } from '../i18n'
 
 const MIN_CARD_WIDTH = 280
 const GAP = 17.6 // 1.1rem
@@ -76,6 +77,7 @@ export function VirtualImageGallery({
   onUnpinResult,
   onDownload,
 }: VirtualImageGalleryProps) {
+  const { m } = useI18n()
   const listRef = useRef<HTMLDivElement>(null)
   const hasImages = images.length > 0
   const columns = useColumnCount(listRef, hasImages)
@@ -147,7 +149,7 @@ export function VirtualImageGallery({
   return (
     <section
       className="gallery gallery-virtual"
-      aria-label="Imagens"
+      aria-label={m.galleryLabel}
       ref={listRef}
     >
       <div
