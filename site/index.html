@@ -7,7 +7,7 @@
   <meta name="description" content="Remova o fundo de centenas de fotos de produto direto no seu computador. Suas fotos nunca saem do PC: funciona offline, é grátis, sem limite e de código aberto." />
   <meta property="og:title" content="Desfundo — remoção de fundo em massa, grátis e offline" />
   <meta property="og:description" content="Grátis, sem limite, sem enviar suas fotos para a internet. Código aberto." />
-  <meta property="og:image" content="img/05-box-sem-fundo.png" />
+  <meta property="og:image" content="img/garrafa-sem-fundo.png" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <style>
     @font-face { font-family: 'Bricolage'; src: url(fonts/bricolage-grotesque-latin-opsz-normal.woff2) format('woff2'); font-weight: 200 800; font-display: swap; }
@@ -59,8 +59,8 @@
     .downloads[hidden] { display: none; }
     .downloads::before { content: '↓'; }
 
-    .compare { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); user-select: none; }
-    .compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+    .compare { position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); user-select: none; }
+    .compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
     .compare .after { position: absolute; inset: 0; background: repeating-conic-gradient(#d9d6cf 0 25%, #f4f2ed 0 50%) 0 0 / 22px 22px; }
     .compare .before-clip { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos, 50%)) 0 0); }
     .compare .handle { position: absolute; top: 0; bottom: 0; left: var(--pos, 50%); width: 2px; background: var(--mint); transform: translateX(-1px); pointer-events: none; }
@@ -70,6 +70,7 @@
     .tag.l { left: 12px; } .tag.r { right: 12px; }
     .thumbs { display: flex; gap: 0.5rem; margin-top: 0.8rem; justify-content: center; }
     .thumbs button { width: 56px; height: 56px; padding: 0; border-radius: 10px; border: 1px solid var(--line); overflow: hidden; cursor: pointer; background: #f4f2ed; }
+    .thumbs button img { width: 100%; height: 100%; object-fit: cover; }
     .thumbs button[aria-pressed='true'] { border-color: var(--mint); box-shadow: 0 0 0 2px var(--mint); }
     .caption { text-align: center; color: var(--paper-dim); font-size: 0.8rem; margin-top: 0.6rem; }
 
@@ -182,18 +183,18 @@
       </div>
       <div>
         <div class="compare" id="compare">
-          <div class="after"><img id="cmp-after" src="img/05-box-sem-fundo.png" alt="Produto com o fundo removido" /></div>
-          <div class="before-clip"><img id="cmp-before" src="img/05-box.png" alt="Foto original do produto" /></div>
+          <div class="after"><img id="cmp-after" src="img/garrafa-sem-fundo.png" alt="Produto com o fundo removido" /></div>
+          <div class="before-clip"><img id="cmp-before" src="img/garrafa.webp" alt="Foto original do produto" /></div>
           <div class="handle"></div>
           <span class="tag l">Antes</span><span class="tag r">Depois</span>
           <input type="range" min="0" max="100" value="50" aria-label="Comparar antes e depois" />
         </div>
         <div class="thumbs" id="thumbs">
-          <button type="button" aria-pressed="true" data-name="05-box" aria-label="Exemplo caixa"><img src="img/05-box.png" alt="" /></button>
-          <button type="button" aria-pressed="false" data-name="03-bottle" aria-label="Exemplo garrafa"><img src="img/03-bottle.png" alt="" /></button>
-          <button type="button" aria-pressed="false" data-name="07-thin-edges" aria-label="Exemplo bordas finas"><img src="img/07-thin-edges.png" alt="" /></button>
+          <button type="button" aria-pressed="true" data-name="garrafa" aria-label="Exemplo garrafa"><img src="img/garrafa.webp" alt="" /></button>
+          <button type="button" aria-pressed="false" data-name="pote" aria-label="Exemplo pote de vidro"><img src="img/pote.webp" alt="" /></button>
+          <button type="button" aria-pressed="false" data-name="lata" aria-label="Exemplo lata"><img src="img/lata.webp" alt="" /></button>
         </div>
-        <p class="caption">Arraste para comparar. Resultados reais do Desfundo em imagens de teste.</p>
+        <p class="caption">Arraste para comparar. Resultados reais do Desfundo em imagens de produto ilustrativas.</p>
       </div>
     </div>
   </header>
@@ -464,7 +465,7 @@
     document.querySelectorAll('#thumbs button').forEach((btn) => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('#thumbs button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)))
-        document.getElementById('cmp-before').src = 'img/' + btn.dataset.name + '.png'
+        document.getElementById('cmp-before').src = 'img/' + btn.dataset.name + '.webp'
         document.getElementById('cmp-after').src = 'img/' + btn.dataset.name + '-sem-fundo.png'
       })
     })
