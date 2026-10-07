@@ -19,6 +19,7 @@ Baixe o `Desfundo-<versão>-portable.exe` na página de [Releases](https://githu
 
 O Desfundo é gratuito. Se ele economizou o seu tempo, considere apoiar o desenvolvimento. Os links de doação também ficam no rodapé do app.
 
+- **Pix:** pelo botão "Pix" no rodapé do app (QR code e copia e cola)
 - [GitHub Sponsors](https://github.com/sponsors/fabbbb12)
 
 ## Desenvolvimento

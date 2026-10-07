@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { DropZone } from './components/DropZone'
+import { PixDonate } from './components/PixDonate'
 import { DehazeMaskModal } from './components/DehazeMaskModal'
 import { EraserModal } from './components/EraserModal'
 import { VirtualImageGallery } from './components/VirtualImageGallery'
@@ -288,19 +289,18 @@ export default function App() {
           Tudo roda no seu computador — as imagens não são enviadas a nenhum
           servidor.
         </p>
-        {DONATE_LINKS.length > 0 && (
-          <p className="foot-donate">
-            Desfundo é gratuito. Se ele te ajudou, apoie o projeto:{' '}
-            {DONATE_LINKS.map((link, i) => (
-              <span key={link.url}>
-                {i > 0 && ' · '}
-                <a href={link.url} target="_blank" rel="noreferrer">
-                  {link.label}
-                </a>
-              </span>
-            ))}
-          </p>
-        )}
+        <p className="foot-donate">
+          Desfundo é gratuito. Se ele te ajudou, apoie o projeto:{' '}
+          <PixDonate />
+          {DONATE_LINKS.map((link) => (
+            <span key={link.url}>
+              {' · '}
+              <a href={link.url} target="_blank" rel="noreferrer">
+                {link.label}
+              </a>
+            </span>
+          ))}
+        </p>
         <details className="foot-about">
           <summary>Sobre e licenças</summary>
           <p>
