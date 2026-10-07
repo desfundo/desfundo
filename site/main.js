@@ -23,8 +23,8 @@ compare.querySelector('input').addEventListener('input', (e) => compare.style.se
 document.querySelectorAll('#thumbs button').forEach((btn) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('#thumbs button').forEach((b) => b.setAttribute('aria-pressed', String(b === btn)))
-    document.getElementById('cmp-before').src = ROOT + 'img/' + btn.dataset.name + '.webp'
-    document.getElementById('cmp-after').src = ROOT + 'img/' + btn.dataset.name + '-sem-fundo.png'
+    document.getElementById('cmp-before').src = ROOT + 'img/' + btn.dataset.before
+    document.getElementById('cmp-after').src = ROOT + 'img/' + btn.dataset.after
   })
 })
 

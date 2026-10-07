@@ -47,7 +47,7 @@ nav .btn { margin-left: auto; padding: 0.5rem 1rem; font-size: 0.9rem; }
 .downloads[hidden] { display: none; }
 .downloads::before { content: '↓'; }
 
-.compare { position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); user-select: none; }
+.compare { position: relative; aspect-ratio: 1; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); user-select: none; }
 .compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .compare .after { position: absolute; inset: 0; background: repeating-conic-gradient(#d9d6cf 0 25%, #f4f2ed 0 50%) 0 0 / 22px 22px; }
 .compare .before-clip { position: absolute; inset: 0; clip-path: inset(0 calc(100% - var(--pos, 50%)) 0 0); }
@@ -56,7 +56,7 @@ nav .btn { margin-left: auto; padding: 0.5rem 1rem; font-size: 0.9rem; }
 .compare input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
 .tag { position: absolute; top: 12px; padding: 0.2rem 0.6rem; border-radius: 999px; background: rgba(12, 16, 14, 0.75); font-size: 0.75rem; font-weight: 600; }
 .tag.l { left: 12px; } .tag.r { right: 12px; }
-.thumbs { display: flex; gap: 0.5rem; margin-top: 0.8rem; justify-content: center; }
+.thumbs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; justify-content: center; }
 .thumbs button { width: 56px; height: 56px; padding: 0; border-radius: 10px; border: 1px solid var(--line); overflow: hidden; cursor: pointer; background: #f4f2ed; }
 .thumbs button img { width: 100%; height: 100%; object-fit: cover; }
 .thumbs button[aria-pressed='true'] { border-color: var(--mint); box-shadow: 0 0 0 2px var(--mint); }

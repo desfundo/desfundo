@@ -7,7 +7,7 @@
   <meta name="description" content="Remova o fundo de centenas de fotos de produto direto no seu computador. Suas fotos nunca saem do PC: funciona offline, é grátis, sem limite e de código aberto." />
   <meta property="og:title" content="Desfundo — remoção de fundo em massa, grátis e offline" />
   <meta property="og:description" content="Grátis, sem limite, sem enviar suas fotos para a internet. Código aberto." />
-  <meta property="og:image" content="img/garrafa-sem-fundo.png" />
+  <meta property="og:image" content="img/carrinho-sem-fundo.webp" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="alternate" hreflang="pt-BR" href="https://desfundo.github.io/" />
   <link rel="alternate" hreflang="en" href="https://desfundo.github.io/en/" />
@@ -63,16 +63,20 @@
       </div>
       <div>
         <div class="compare" id="compare">
-          <div class="after"><img id="cmp-after" src="img/garrafa-sem-fundo.png" alt="Produto com o fundo removido" /></div>
-          <div class="before-clip"><img id="cmp-before" src="img/garrafa.webp" alt="Foto original do produto" /></div>
+          <div class="after"><img id="cmp-after" src="img/carrinho-sem-fundo.webp" alt="Produto com o fundo removido" /></div>
+          <div class="before-clip"><img id="cmp-before" src="img/carrinho.webp" alt="Foto original do produto" /></div>
           <div class="handle"></div>
           <span class="tag l">Antes</span><span class="tag r">Depois</span>
           <input type="range" min="0" max="100" value="50" aria-label="Comparar antes e depois" />
         </div>
         <div class="thumbs" id="thumbs">
-          <button type="button" aria-pressed="true" data-name="garrafa" aria-label="Exemplo garrafa"><img src="img/garrafa.webp" alt="" /></button>
-          <button type="button" aria-pressed="false" data-name="pote" aria-label="Exemplo pote de vidro"><img src="img/pote.webp" alt="" /></button>
-          <button type="button" aria-pressed="false" data-name="lata" aria-label="Exemplo lata"><img src="img/lata.webp" alt="" /></button>
+          <button type="button" aria-pressed="true" data-before="carrinho.webp" data-after="carrinho-sem-fundo.webp" aria-label="Exemplo carrinho de brinquedo"><img src="img/carrinho.webp" alt="" /></button>
+          <button type="button" aria-pressed="false" data-before="tenis.webp" data-after="tenis-sem-fundo.webp" aria-label="Exemplo tênis"><img src="img/tenis.webp" alt="" /></button>
+          <button type="button" aria-pressed="false" data-before="bolsa.webp" data-after="bolsa-sem-fundo.webp" aria-label="Exemplo bolsa"><img src="img/bolsa.webp" alt="" /></button>
+          <button type="button" aria-pressed="false" data-before="macarrao.webp" data-after="macarrao-sem-fundo.webp" aria-label="Exemplo pacote de macarrão"><img src="img/macarrao.webp" alt="" /></button>
+          <button type="button" aria-pressed="false" data-before="fone.webp" data-after="fone-sem-fundo.webp" aria-label="Exemplo fone de ouvido"><img src="img/fone.webp" alt="" /></button>
+          <button type="button" aria-pressed="false" data-before="pote.webp" data-after="pote-sem-fundo.png" aria-label="Exemplo pote de vidro"><img src="img/pote.webp" alt="" /></button>
+          <button type="button" aria-pressed="false" data-before="lata.webp" data-after="lata-sem-fundo.png" aria-label="Exemplo lata"><img src="img/lata.webp" alt="" /></button>
         </div>
         <p class="caption">Arraste para comparar. Resultados reais do Desfundo em imagens de produto ilustrativas.</p>
       </div>
