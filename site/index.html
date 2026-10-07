@@ -102,6 +102,11 @@
 
     .donate { display: grid; gap: 1.5rem; }
     @media (min-width: 860px) { .donate { grid-template-columns: 1fr 1fr; } }
+    .donate-region { margin: 2.2rem 0 1rem; font-size: 1.3rem; color: var(--mint); }
+    .donate + .donate-region { margin-top: 3rem; }
+    .btn-paypal { margin-top: 1rem; background: #ffc439; color: #003087; }
+    .btn-paypal:hover { background: #f2ba36; }
+    .btn-paypal i { font-weight: 800; }
     .pix { text-align: center; }
     .pix img { width: 200px; height: 200px; margin: 1rem auto; border-radius: 10px; background: #fff; }
     .pix .holder { padding: 0.6rem 0.8rem; border-radius: 10px; background: color-mix(in srgb, var(--mint) 12%, transparent); font-size: 0.88rem; margin: 0.8rem 0 0; color: var(--paper); }
@@ -303,6 +308,8 @@
     <div class="wrap">
       <h2>Apoie o projeto</h2>
       <p class="lede">O Desfundo é e continuará gratuito. Se ele economizou o seu tempo ou o seu dinheiro, considere apoiar o desenvolvimento. Qualquer valor ajuda.</p>
+
+      <h3 class="donate-region">Do Brasil</h3>
       <div class="donate">
         <div class="card pix">
           <h3>Pix</h3>
@@ -313,11 +320,28 @@
           <p class="key">Chave aleatória: de539899-0b61-484e-9e9f-eed74734be86</p>
         </div>
         <div class="card">
-          <h3>GitHub Sponsors</h3>
-          <p>Para apoiar com cartão internacional, uma vez ou todo mês.</p>
+          <h3>PayPal</h3>
+          <p>Com saldo PayPal ou cartão de crédito, em reais.</p>
+          <a class="btn btn-paypal" data-paypal="BRL" href="#" target="_blank" rel="noopener">Doar com <i>PayPal</i></a>
+          <h3 style="margin-top: 2rem;">GitHub Sponsors</h3>
+          <p>Uma vez ou todo mês, com cartão.</p>
           <iframe src="https://github.com/sponsors/fabbbb12/button" title="Sponsor fabbbb12" height="32" width="114" style="border: 0; border-radius: 6px; margin-top: 1rem;"></iframe>
           <h3 style="margin-top: 2rem;">Outras formas de ajudar</h3>
           <p>Dê uma estrela no <a href="https://github.com/desfundo/desfundo">GitHub</a>, indique o Desfundo para quem vende online ou <a href="https://github.com/desfundo/desfundo/issues">reporte um problema</a>.</p>
+        </div>
+      </div>
+
+      <h3 class="donate-region" lang="en">From abroad</h3>
+      <div class="donate" lang="en">
+        <div class="card">
+          <h3>PayPal</h3>
+          <p>Donate once with your PayPal balance or any credit card, in US dollars.</p>
+          <a class="btn btn-paypal" data-paypal="USD" href="#" target="_blank" rel="noopener">Donate with <i>PayPal</i></a>
+        </div>
+        <div class="card">
+          <h3>GitHub Sponsors</h3>
+          <p>Support Desfundo once or monthly. GitHub charges no fees on personal sponsorships.</p>
+          <iframe src="https://github.com/sponsors/fabbbb12/button" title="Sponsor fabbbb12" height="32" width="114" style="border: 0; border-radius: 6px; margin-top: 1rem;"></iframe>
         </div>
       </div>
     </div>
@@ -369,6 +393,18 @@
       document.getElementById('app-bar').style.width = Math.max(1, (APP_MB / max) * 100) + '%'
     }
     n.addEventListener('input', updateCalc); mb.addEventListener('input', updateCalc); updateCalc()
+
+    // PayPal donate links. Swap PAYPAL_ACCOUNT for the PayPal.Me link/e-mail later — one place only.
+    const PAYPAL_ACCOUNT = 'fabricio.vale@live.com'
+    document.querySelectorAll('[data-paypal]').forEach((a) => {
+      const params = new URLSearchParams({
+        business: PAYPAL_ACCOUNT,
+        currency_code: a.dataset.paypal,
+        item_name: a.dataset.paypal === 'BRL' ? 'Doação para o Desfundo' : 'Donation to Desfundo',
+        no_recurring: '0',
+      })
+      a.href = 'https://www.paypal.com/donate/?' + params
+    })
 
     document.querySelectorAll('[data-copy]').forEach((btn) => {
       const label = btn.textContent
