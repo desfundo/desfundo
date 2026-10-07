@@ -1,6 +1,6 @@
 /** Public project links shown in the app footer. */
 
-export const SOURCE_URL = 'https://github.com/fabbbb12/desfundo'
+export const SOURCE_URL = 'https://github.com/desfundo/desfundo'
 
 export const LICENSE_NAME = 'AGPL-3.0'
 

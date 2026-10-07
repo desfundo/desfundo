@@ -11,7 +11,7 @@ Gratuito e de código aberto.
 
 ## Baixar
 
-Baixe o `Desfundo-<versão>-portable.exe` na página de [Releases](https://github.com/fabbbb12/desfundo/releases) e abra. Não precisa instalar.
+Baixe o `Desfundo-<versão>-portable.exe` na página de [Releases](https://github.com/desfundo/desfundo/releases) e abra. Não precisa instalar.
 
 > O executável não tem assinatura digital paga, então o Windows SmartScreen pode avisar na primeira vez. Clique em **Mais informações → Executar assim mesmo**.
 

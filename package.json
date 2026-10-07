@@ -3,12 +3,12 @@
   "private": true,
   "version": "0.4.0",
   "description": "Remoção de fundo em massa, local e offline, para fotos de produto.",
-  "author": "fabbbb12",
+  "author": "Desfundo",
   "license": "AGPL-3.0-only",
-  "homepage": "https://github.com/fabbbb12/desfundo",
+  "homepage": "https://github.com/desfundo/desfundo",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fabbbb12/desfundo.git"
+    "url": "https://github.com/desfundo/desfundo.git"
   },
   "type": "module",
   "main": "electron/main.cjs",
@@ -56,7 +56,7 @@
     "vite": "^8.2.0"
   },
   "build": {
-    "appId": "io.github.fabbbb12.desfundo",
+    "appId": "io.github.desfundo",
     "productName": "Desfundo",
     "copyright": "Desfundo — software livre sob AGPL-3.0",
     "directories": {
