@@ -56,8 +56,8 @@ nav .btn { margin-left: auto; padding: 0.5rem 1rem; font-size: 0.9rem; }
 .compare input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
 .tag { position: absolute; top: 12px; padding: 0.2rem 0.6rem; border-radius: 999px; background: rgba(12, 16, 14, 0.75); font-size: 0.75rem; font-weight: 600; }
 .tag.l { left: 12px; } .tag.r { right: 12px; }
-.thumbs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; justify-content: center; }
-.thumbs button { width: 56px; height: 56px; padding: 0; border-radius: 10px; border: 1px solid var(--line); overflow: hidden; cursor: pointer; background: #f4f2ed; }
+.thumbs { display: grid; grid-template-columns: repeat(auto-fit, minmax(34px, 1fr)); gap: 0.4rem; margin-top: 0.8rem; }
+.thumbs button { width: 100%; aspect-ratio: 1; padding: 0; border-radius: 10px; border: 1px solid var(--line); overflow: hidden; cursor: pointer; background: #f4f2ed; }
 .thumbs button img { width: 100%; height: 100%; object-fit: cover; }
 .thumbs button[aria-pressed='true'] { border-color: var(--mint); box-shadow: 0 0 0 2px var(--mint); }
 .caption { text-align: center; color: var(--paper-dim); font-size: 0.8rem; margin-top: 0.6rem; }
