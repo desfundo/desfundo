@@ -309,17 +309,20 @@ export default function App() {
             {m.fullList}
           </p>
         </details>
-        <div className="lang-switch" role="group" aria-label={m.langLabel}>
-          {(['pt', 'en'] as const).map((code) => (
-            <button
-              key={code}
-              type="button"
-              aria-pressed={lang === code}
-              onClick={() => setLang(code)}
-            >
-              {code.toUpperCase()}
-            </button>
-          ))}
+        <div className="foot-bar">
+          <div className="lang-switch" role="group" aria-label={m.langLabel}>
+            {(['pt', 'en'] as const).map((code) => (
+              <button
+                key={code}
+                type="button"
+                aria-pressed={lang === code}
+                onClick={() => setLang(code)}
+              >
+                {code.toUpperCase()}
+              </button>
+            ))}
+          </div>
+          <span className="app-version">Desfundo v{__APP_VERSION__}</span>
         </div>
       </footer>
 

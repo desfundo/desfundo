@@ -1,7 +1,7 @@
 {
   "name": "desfundo",
   "private": true,
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Remoção de fundo em massa, local e offline, para fotos de produto.",
   "author": "Desfundo",
   "license": "AGPL-3.0-only",

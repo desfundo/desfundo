@@ -1,5 +1,8 @@
+import { readFileSync } from 'node:fs'
 import { defineConfig, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
+
+const { version } = JSON.parse(readFileSync(new URL('./package.json', import.meta.url), 'utf8'))
 
 /**
  * onnxruntime-web (inside IMG.LY) makes Vite emit its 24 MB JSEP wasm, but IMG.LY
@@ -28,6 +31,10 @@ export default defineConfig({
   // Required so Electron can load assets from file:// after packaging.
   base: './',
   plugins: [react(), dropUnusedOrtWasm()],
+  // Shown in the app footer, so testers always know which build is open.
+  define: {
+    __APP_VERSION__: JSON.stringify(version),
+  },
   optimizeDeps: {
     exclude: ['@imgly/background-removal'],
   },
