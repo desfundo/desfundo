@@ -1,0 +1,56 @@
+:root {
+  --ink: #0c100e;
+  --ink-2: #141a17;
+  --ink-3: #1c2420;
+  --paper: #e7e2d7;
+  --paper-dim: #b9b3a6;
+  --mint: #7ec8a3;
+  --mint-deep: #4fa87c;
+  --coral: #e07a5f;
+  --line: rgba(231, 226, 215, 0.12);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  --radius: 18px;
+  --font-display: 'Bricolage Grotesque Variable', Georgia, serif;
+  --font-body: 'Figtree Variable', system-ui, sans-serif;
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--ink);
+  color: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--mint) 40%, transparent);
+  color: var(--ink);
+}

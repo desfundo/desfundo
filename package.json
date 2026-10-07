@@ -1,0 +1,82 @@
+{
+  "name": "desfundo",
+  "private": true,
+  "version": "0.4.0",
+  "description": "Remoção de fundo em massa, local e offline, para fotos de produto.",
+  "author": "fabbbb12",
+  "license": "AGPL-3.0-only",
+  "homepage": "https://github.com/fabbbb12/desfundo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabbbb12/desfundo.git"
+  },
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "imgly:data": "node scripts/fetch-imgly-data.mjs",
+    "prebuild": "node scripts/fetch-imgly-data.mjs",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "test": "tsx --test src/lib/batchScheduler.test.ts src/lib/progressThrottle.test.ts src/lib/resultStore.test.ts src/lib/baseResultRetention.test.ts src/lib/currentResultRetention.test.ts src/lib/backgroundRemoval/engine.test.ts src/lib/pdfPages.test.ts src/lib/zipNames.test.ts",
+    "electron": "electron .",
+    "desktop": "npm run build && electron .",
+    "dist:win": "npm run build && electron-builder --win portable --x64"
+  },
+  "dependencies": {
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/figtree": "^5.3.0",
+    "@imgly/background-removal": "^1.7.0",
+    "@tanstack/react-virtual": "^3.14.9",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
+    "onnxruntime-web": "^1.21.0",
+    "pdfjs-dist": "^5.4.296",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/file-saver": "^2.0.7",
+    "@types/node": "^24.13.3",
+    "@types/pngjs": "^6.0.5",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "electron": "^37.2.6",
+    "electron-builder": "^26.0.12",
+    "fake-indexeddb": "^6.2.5",
+    "oxlint": "^1.75.0",
+    "pngjs": "^7.0.0",
+    "tsx": "^4.20.5",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0"
+  },
+  "build": {
+    "appId": "io.github.fabbbb12.desfundo",
+    "productName": "Desfundo",
+    "copyright": "Desfundo — software livre sob AGPL-3.0",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json",
+      "LICENSE",
+      "!node_modules/**/*"
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "artifactName": "Desfundo-${version}-portable.${ext}"
+    }
+  }
+}
