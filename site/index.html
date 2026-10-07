@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Desfundo — remova o fundo de fotos de produto em massa, grátis e offline</title>
-  <meta name="description" content="Remova o fundo de centenas de fotos de produto de uma vez, direto no seu computador. Grátis, sem limite, sem marca d'água, offline e de código aberto." />
+  <title>Desfundo — remova o fundo de fotos sem enviá-las para a internet</title>
+  <meta name="description" content="Remova o fundo de centenas de fotos de produto direto no seu computador. Suas fotos nunca saem do PC: funciona offline, é grátis, sem limite e de código aberto." />
   <meta property="og:title" content="Desfundo — remoção de fundo em massa, grátis e offline" />
   <meta property="og:description" content="Grátis, sem limite, sem enviar suas fotos para a internet. Código aberto." />
   <meta property="og:image" content="img/05-box-sem-fundo.png" />
@@ -114,6 +114,27 @@
     .pix .key { font-size: 0.78rem; color: var(--paper-dim); word-break: break-all; margin-top: 0.8rem; }
     .pix .btn { width: 100%; justify-content: center; margin-top: 0.4rem; }
 
+    .privacy { background: linear-gradient(180deg, color-mix(in srgb, var(--mint) 7%, var(--ink)) 0%, var(--ink) 100%); }
+    .eyebrow { margin: 0 0 0.6rem; color: var(--mint); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.8rem; }
+    .privacy h2 { font-size: clamp(2.1rem, 5.5vw, 3.4rem); max-width: 18ch; }
+    .flows { display: grid; gap: 1rem; margin-bottom: 2rem; }
+    @media (min-width: 860px) { .flows { grid-template-columns: 1fr 1fr; } }
+    .flow { border-radius: var(--radius); padding: 1.3rem; border: 1px solid var(--line); background: var(--ink-2); }
+    .flow.bad { border-color: color-mix(in srgb, var(--coral) 45%, transparent); }
+    .flow.good { border-color: color-mix(in srgb, var(--mint) 60%, transparent); }
+    .flow-title { margin: 0 0 0.9rem; font-weight: 700; }
+    .flow.bad .flow-title { color: var(--coral); }
+    .flow.good .flow-title { color: var(--mint); }
+    .flow-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+    .node { padding: 0.45rem 0.8rem; border-radius: 10px; background: var(--ink-3); font-size: 0.9rem; font-weight: 600; }
+    .node.danger { background: color-mix(in srgb, var(--coral) 22%, transparent); }
+    .node.ok { background: color-mix(in srgb, var(--mint) 20%, transparent); }
+    .arrow { color: var(--paper-dim); font-size: 0.85rem; }
+    .flow-note { margin: 0.9rem 0 0; color: var(--paper-dim); font-size: 0.9rem; }
+    .privacy-grid { margin-bottom: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+    .proof { display: flex; gap: 1rem; align-items: flex-start; padding: 1.3rem; border-radius: var(--radius); border: 1px dashed color-mix(in srgb, var(--mint) 55%, transparent); }
+    .proof svg { flex: none; width: 34px; height: 34px; color: var(--mint); }
+    .proof p { margin: 0.4rem 0 0; color: var(--paper-dim); }
     details { border-bottom: 1px solid var(--line); padding: 1rem 0; }
     summary { cursor: pointer; font-weight: 600; font-size: 1.05rem; }
     details p { color: var(--paper-dim); margin: 0.6rem 0 0; }
@@ -127,6 +148,7 @@
     <div class="wrap">
       <a class="logo" href="#">Desfundo</a>
       <div class="links">
+        <a href="#privacidade">Privacidade</a>
         <a href="#diferenciais">Diferenciais</a>
         <a href="#economia">Economia</a>
         <a href="#como-funciona">Como funciona</a>
@@ -141,7 +163,7 @@
     <div class="wrap hero-grid">
       <div>
         <div class="pills">
-          <span class="pill">100% grátis</span><span class="pill">Código aberto</span><span class="pill">Offline</span><span class="pill">Sem cadastro</span>
+          <span class="pill">100% privado</span><span class="pill">100% grátis</span><span class="pill">Código aberto</span><span class="pill">Funciona offline</span>
         </div>
         <h1>Remova o fundo de <em>centenas</em> de fotos de produto de uma vez.</h1>
         <p class="lede">Sem limite, sem marca d'água e sem enviar uma única foto para a internet. A inteligência artificial roda no seu próprio computador.</p>
@@ -171,6 +193,61 @@
       </div>
     </div>
   </header>
+
+  <section id="privacidade" class="privacy">
+    <div class="wrap">
+      <p class="eyebrow">Privacidade</p>
+      <h2>Suas fotos nunca saem do seu computador.</h2>
+      <p class="lede">Nem para a nuvem, nem para um servidor, nem para nós. A inteligência artificial roda inteira dentro do seu PC. Por isso o Desfundo funciona até com a internet desligada.</p>
+
+      <div class="flows">
+        <div class="flow bad">
+          <p class="flow-title">Removedores de fundo online</p>
+          <div class="flow-row">
+            <span class="node">Seu PC</span>
+            <span class="arrow">foto sobe →</span>
+            <span class="node danger">Servidor de terceiros</span>
+            <span class="arrow">← resultado desce</span>
+          </div>
+          <p class="flow-note">Sua foto fica em um computador que você não controla, sob regras de privacidade que você não escreveu.</p>
+        </div>
+        <div class="flow good">
+          <p class="flow-title">Desfundo</p>
+          <div class="flow-row">
+            <span class="node ok">Seu PC: foto entra, IA processa, resultado sai</span>
+          </div>
+          <p class="flow-note">Nenhum envio. Nenhuma cópia em lugar nenhum. O que é seu continua só com você.</p>
+        </div>
+      </div>
+
+      <div class="grid privacy-grid">
+        <div class="card">
+          <h3>Produtos que ainda não foram lançados</h3>
+          <p>Fotos de lançamentos, protótipos e coleções novas não vazam antes da hora.</p>
+        </div>
+        <div class="card">
+          <h3>Fotos com pessoas e clientes</h3>
+          <p>Imagens com modelos, clientes ou documentos não passam por empresas terceiras. Menos risco com a LGPD.</p>
+        </div>
+        <div class="card">
+          <h3>Sem conta, sem rastreio</h3>
+          <p>O app não pede cadastro, não coleta dados de uso e não tem anúncios. Não há nada sobre você para vazar.</p>
+        </div>
+        <div class="card">
+          <h3>Não precisa confiar em nós</h3>
+          <p>O código é aberto: qualquer pessoa pode conferir que não existe envio de imagens escondido.</p>
+        </div>
+      </div>
+
+      <div class="proof">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 2l20 20M8.5 16.5a5 5 0 0 1 7 0M5 13a10 10 0 0 1 5.2-2.8M19 13a10 10 0 0 0-2-1.5M2 8.8a15 15 0 0 1 4.2-2.7M22 8.8A15 15 0 0 0 10.7 5M12 20h.01"/></svg>
+        <div>
+          <h3>Faça o teste você mesmo</h3>
+          <p>Desligue o Wi-Fi ou tire o cabo de rede, abra o Desfundo e remova o fundo das suas fotos. Funciona igual. Um programa que precisasse enviar suas imagens não conseguiria.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <section id="diferenciais">
     <div class="wrap">
