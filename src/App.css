@@ -888,6 +888,14 @@
   margin-bottom: 0.8rem;
 }
 
+.pix-dialog .pix-holder {
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--mint) 12%, transparent);
+  color: var(--paper);
+  font-size: 0.82rem;
+}
+
 .pix-dialog .pix-key {
   font-size: 0.75rem;
   word-break: break-all;

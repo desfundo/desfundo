@@ -23,6 +23,9 @@ export const PIX = {
   city: 'Brasil',
 } as const
 
+/** Told to the donor up front, so the holder name at bank confirmation isn't a surprise. */
+export const PIX_HOLDER_FIRST_NAME = 'Fabricio'
+
 export const CREDITS = [
   { name: 'IMG.LY background-removal', url: 'https://github.com/imgly/background-removal-js', license: 'AGPL-3.0' },
   { name: 'ONNX Runtime Web', url: 'https://github.com/microsoft/onnxruntime', license: 'MIT' },

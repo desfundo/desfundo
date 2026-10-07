@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { PIX } from '../config/project'
+import { PIX, PIX_HOLDER_FIRST_NAME } from '../config/project'
 import { buildPixPayload } from '../lib/pix'
 
 const PAYLOAD = buildPixPayload(PIX)
@@ -33,6 +33,10 @@ export function PixDonate() {
         }}
       >
         <h2>Apoie com Pix</h2>
+        <p className="pix-holder">
+          O Pix cai na conta de <strong>{PIX_HOLDER_FIRST_NAME}</strong>, criador do Desfundo.
+          É esse nome que o seu banco vai mostrar na confirmação.
+        </p>
         <p>Qualquer valor ajuda. Escaneie com o app do seu banco:</p>
         <img src="./pix-qr.svg" alt="QR code Pix para doação" width={220} height={220} />
         <div className="pix-actions">
