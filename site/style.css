@@ -81,6 +81,8 @@ nav .btn { margin-left: auto; padding: 0.5rem 1rem; font-size: 0.9rem; }
 .bar .online { background: var(--coral); }
 .bar .local { background: var(--mint); }
 .note { color: var(--paper-dim); font-size: 0.82rem; margin-top: 0.8rem; }
+.eco { margin: -1rem 0 1.6rem; padding: 0.8rem 1rem; border-left: 3px solid var(--mint); background: color-mix(in srgb, var(--mint) 8%, transparent); color: var(--paper-dim); font-size: 0.95rem; }
+.eco strong { color: var(--paper); }
 
 table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
 th, td { text-align: left; padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
