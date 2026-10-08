@@ -26,9 +26,9 @@ section { padding: clamp(3.5rem, 8vw, 6rem) 0; border-top: 1px solid var(--line)
 
 nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--ink) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 nav .wrap { display: flex; align-items: center; gap: 1.5rem; height: 60px; }
-.logo { display: inline-flex; align-items: baseline; white-space: nowrap; flex: none; font: 800 1.35rem var(--display); color: var(--mint); text-decoration: none; letter-spacing: -0.03em; }
+.logo { display: inline-flex; align-items: baseline; white-space: nowrap; flex: none; font: 800 1.65rem var(--display); color: var(--mint); text-decoration: none; letter-spacing: -0.03em; }
 /* The logo D stands in for the first letter: cap height, sitting on the baseline. */
-.logo img { height: 0.74em; width: auto; margin-right: 0.04em; align-self: baseline; }
+.logo img { height: 0.82em; width: auto; margin-right: 0.04em; align-self: baseline; }
 nav .links { display: none; gap: 1.25rem; margin-left: auto; }
 nav .links a { color: var(--paper-dim); text-decoration: none; font-size: 0.95rem; }
 nav .links a:hover { color: var(--paper); }
@@ -153,3 +153,8 @@ nav .lang-switch + .btn { margin-left: 0; }
 .legal p, .legal li { color: var(--paper-dim); }
 .legal li { margin-bottom: 0.5rem; }
 .legal strong { color: var(--paper); }
+@media (max-width: 480px) {
+  nav .wrap { gap: 0.6rem; }
+  .logo { font-size: 1.35rem; }
+  nav .btn { padding: 0.45rem 0.8rem; font-size: 0.82rem; }
+}
