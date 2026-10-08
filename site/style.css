@@ -143,3 +143,11 @@ footer p { margin: 0.3rem 0; }
 .lang-switch a:hover { color: var(--paper); }
 nav .lang-switch + .btn { margin-left: 0; }
 @media (min-width: 1040px) { .lang-switch { margin-left: 0; } }
+
+.legal { border-top: 0; }
+.legal .wrap { max-width: 760px; }
+.legal h1 { font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 0.4rem; }
+.legal h2 { font-size: 1.35rem; margin: 2rem 0 0.6rem; }
+.legal p, .legal li { color: var(--paper-dim); }
+.legal li { margin-bottom: 0.5rem; }
+.legal strong { color: var(--paper); }
