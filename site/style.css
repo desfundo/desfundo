@@ -26,7 +26,8 @@ section { padding: clamp(3.5rem, 8vw, 6rem) 0; border-top: 1px solid var(--line)
 
 nav { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--ink) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 nav .wrap { display: flex; align-items: center; gap: 1.5rem; height: 60px; }
-.logo { font: 800 1.35rem var(--display); color: var(--mint); text-decoration: none; letter-spacing: -0.03em; }
+.logo { display: inline-flex; align-items: center; gap: 0.5rem; font: 800 1.35rem var(--display); color: var(--mint); text-decoration: none; letter-spacing: -0.03em; }
+.logo img { width: 30px; height: 30px; border-radius: 8px; }
 nav .links { display: none; gap: 1.25rem; margin-left: auto; }
 nav .links a { color: var(--paper-dim); text-decoration: none; font-size: 0.95rem; }
 nav .links a:hover { color: var(--paper); }
