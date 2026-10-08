@@ -31,7 +31,8 @@ nav .links { display: none; gap: 1.25rem; margin-left: auto; }
 nav .links a { color: var(--paper-dim); text-decoration: none; font-size: 0.95rem; }
 nav .links a:hover { color: var(--paper); }
 nav .btn { margin-left: auto; padding: 0.5rem 1rem; font-size: 0.9rem; }
-@media (min-width: 860px) { nav .links { display: flex; } nav .btn { margin-left: 0; } }
+@media (min-width: 1040px) { nav .links { display: flex; } nav .btn { margin-left: 0; } }
+nav .links a, nav .btn { white-space: nowrap; }
 
 .hero { padding: clamp(3rem, 9vw, 6.5rem) 0 clamp(3rem, 7vw, 5rem); border-top: 0; }
 .hero-grid { display: grid; gap: 3rem; align-items: center; }
@@ -141,4 +142,4 @@ footer p { margin: 0.3rem 0; }
 .lang-switch [aria-current] { background: var(--ink-3); color: var(--paper); }
 .lang-switch a:hover { color: var(--paper); }
 nav .lang-switch + .btn { margin-left: 0; }
-@media (min-width: 860px) { .lang-switch { margin-left: 0; } }
+@media (min-width: 1040px) { .lang-switch { margin-left: 0; } }
