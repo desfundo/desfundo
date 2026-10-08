@@ -90,8 +90,8 @@ nav .links a, nav .btn { white-space: nowrap; }
 table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
 th, td { text-align: left; padding: 0.85rem 0.75rem; border-bottom: 1px solid var(--line); vertical-align: top; }
 th { font-family: var(--display); font-size: 1rem; }
-td:nth-child(2) { color: var(--paper-dim); }
-td:nth-child(3) { color: var(--mint); font-weight: 600; }
+td:nth-child(2) { color: var(--mint); font-weight: 600; }
+td:nth-child(3) { color: var(--paper-dim); }
 .table-wrap { overflow-x: auto; }
 
 .steps { counter-reset: s; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
