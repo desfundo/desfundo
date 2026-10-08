@@ -45,6 +45,10 @@ O primeiro build baixa o modelo da IMG.LY (~100 MB, hash verificado) para `publi
 
 Limitação atual do PDF: uma página vira um item. Se a página tiver vários produtos, o fundo é removido da página inteira.
 
+## Contato
+
+[desfundo@outlook.com](mailto:desfundo@outlook.com) ou [Discussions](https://github.com/desfundo/desfundo/discussions).
+
 ## Licença
 
 [AGPL-3.0](LICENSE). Você pode usar, copiar, modificar e redistribuir, inclusive comercialmente, desde que o código-fonte das versões distribuídas continue disponível sob a mesma licença.
