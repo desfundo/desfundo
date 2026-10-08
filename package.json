@@ -85,14 +85,17 @@
     },
     "appx": {
       "applicationId": "Desfundo",
-      "displayName": "Desfundo",
+      "displayName": "Desfundo: Remoção de Fundo em Massa",
       "backgroundColor": "#0C100E",
       "showNameOnTiles": false,
       "languages": [
         "pt-BR",
         "en-US"
       ],
-      "artifactName": "Desfundo-${version}.${ext}"
+      "artifactName": "Desfundo-${version}.${ext}",
+      "identityName": "Desfundo.DesfundoRemoodeFundoemMassa",
+      "publisher": "CN=EE402337-63BF-4906-AC3B-E9879A796DC1",
+      "publisherDisplayName": "Desfundo"
     }
   }
 }
