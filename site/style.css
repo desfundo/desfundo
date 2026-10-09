@@ -159,3 +159,12 @@ nav .lang-switch + .btn { margin-left: 0; }
   .logo { font-size: 1.35rem; }
   nav .btn { padding: 0.45rem 0.8rem; font-size: 0.82rem; }
 }
+
+/* Video tutorial: a local poster; the YouTube iframe loads only on click. */
+.video { position: relative; margin-top: 1.5rem; aspect-ratio: 16 / 9; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: #000; }
+.video-play { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
+.video-play img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-ico { position: absolute; inset: 0; margin: auto; width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; background: var(--mint); color: #0c1a13; box-shadow: 0 8px 30px rgb(0 0 0 / 0.45); transition: transform 0.15s; }
+.video-ico svg { margin-left: 3px; }
+.video-play:hover .video-ico, .video-play:focus-visible .video-ico { transform: scale(1.08); }
+.video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }

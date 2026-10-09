@@ -78,3 +78,19 @@ document.querySelectorAll('[data-copy]').forEach((btn) => {
     setTimeout(() => (btn.textContent = label), 2000)
   })
 })
+
+// Video: swap the poster for the YouTube player only after a click (no third-party
+// requests before that). Subtitles on by default, since the video has no audio.
+document.querySelectorAll('.video[data-video]').forEach((box) => {
+  box.querySelector('.video-play').addEventListener('click', () => {
+    const cc = box.dataset.cc
+    const params = new URLSearchParams({ autoplay: '1', rel: '0', cc_load_policy: '1', cc_lang_pref: cc, hl: cc === 'pt' ? 'pt-BR' : 'en' })
+    const iframe = document.createElement('iframe')
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + box.dataset.video + '?' + params
+    iframe.title = box.querySelector('.video-play').getAttribute('aria-label')
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'
+    iframe.allowFullscreen = true
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin'
+    box.replaceChildren(iframe)
+  })
+})
