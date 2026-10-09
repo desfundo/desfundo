@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 import { DropZone } from './components/DropZone'
 import { PixDonate } from './components/PixDonate'
+import { UpdateCheck } from './components/UpdateCheck'
 import { DehazeMaskModal } from './components/DehazeMaskModal'
 import { EraserModal } from './components/EraserModal'
 import { VirtualImageGallery } from './components/VirtualImageGallery'
@@ -323,6 +324,7 @@ export default function App() {
             ))}
           </div>
           <span className="app-version">Desfundo v{__APP_VERSION__}</span>
+          <UpdateCheck />
         </div>
       </footer>
 

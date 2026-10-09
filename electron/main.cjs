@@ -75,12 +75,14 @@ function createWindow() {
   const appUrl = app.isPackaged
     ? `${APP_ORIGIN}/index.html`
     : process.env.VITE_DEV_SERVER_URL || 'http://127.0.0.1:5173'
+  // The Store build is updated by Windows, so the page hides "Check for updates".
+  const startUrl = process.windowsStore ? `${appUrl}?store` : appUrl
   win.webContents.on('will-navigate', (event, url) => {
     if (new URL(url).origin !== new URL(appUrl).origin) event.preventDefault()
   })
 
   confirmBeforeClose(win)
-  win.loadURL(appUrl)
+  win.loadURL(startUrl)
 }
 
 const CLOSE_TEXT = {

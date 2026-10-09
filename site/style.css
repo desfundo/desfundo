@@ -46,6 +46,7 @@ nav .links a, nav .btn { white-space: nowrap; }
 .hero .lede { font-size: 1.15rem; margin-bottom: 1.8rem; }
 .cta { display: flex; flex-wrap: wrap; gap: 0.75rem; }
 .fine { margin-top: 0.9rem; color: var(--paper-dim); font-size: 0.85rem; }
+.fine a { color: inherit; }
 .downloads { display: inline-flex; align-items: center; gap: 0.4rem; margin: 0.6rem 0 0; padding: 0.3rem 0.8rem; border-radius: 999px; background: color-mix(in srgb, var(--mint) 14%, transparent); color: var(--mint); font-size: 0.85rem; font-weight: 700; }
 .downloads[hidden] { display: none; }
 .downloads::before { content: '↓'; }

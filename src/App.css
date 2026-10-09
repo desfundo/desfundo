@@ -852,6 +852,34 @@
   font-variant-numeric: tabular-nums;
 }
 
+.update-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: color-mix(in srgb, var(--paper-dim) 75%, transparent);
+  font-size: 0.8rem;
+}
+
+.update-check button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--mint);
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.update-check button:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+.foot a.update-available {
+  font-weight: 600;
+}
+
 .lang-switch {
   display: inline-flex;
   gap: 0.15rem;
