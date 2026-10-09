@@ -1,4 +1,4 @@
-const { app, BrowserWindow, net, protocol, shell } = require('electron')
+const { app, BrowserWindow, dialog, net, protocol, shell } = require('electron')
 const path = require('path')
 const { pathToFileURL } = require('url')
 
@@ -79,7 +79,56 @@ function createWindow() {
     if (new URL(url).origin !== new URL(appUrl).origin) event.preventDefault()
   })
 
+  confirmBeforeClose(win)
   win.loadURL(appUrl)
+}
+
+const CLOSE_TEXT = {
+  pt: {
+    buttons: ['Fechar', 'Cancelar'],
+    message: 'Fechar o Desfundo?',
+    detail: 'As fotos que ainda não foram baixadas serão perdidas.',
+  },
+  en: {
+    buttons: ['Close', 'Cancel'],
+    message: 'Close Desfundo?',
+    detail: 'Photos you have not downloaded yet will be lost.',
+  },
+}
+
+/** Ask before closing: results live only in memory, so closing discards them. */
+function confirmBeforeClose(win) {
+  let confirmed = false
+  let asking = false
+  win.on('close', async (event) => {
+    if (confirmed) return
+    event.preventDefault()
+    if (asking) return
+    asking = true
+    try {
+      // The page sets <html lang> from the language picked in the footer.
+      const pageLang = await win.webContents
+        .executeJavaScript('document.documentElement.lang')
+        .catch(() => app.getLocale())
+      const text = CLOSE_TEXT[String(pageLang).toLowerCase().startsWith('pt') ? 'pt' : 'en']
+      const { response } = await dialog.showMessageBox(win, {
+        type: 'question',
+        title: 'Desfundo',
+        buttons: text.buttons,
+        defaultId: 0,
+        cancelId: 1,
+        noLink: true,
+        message: text.message,
+        detail: text.detail,
+      })
+      if (response === 0) {
+        confirmed = true
+        win.close()
+      }
+    } finally {
+      asking = false
+    }
+  })
 }
 
 app.whenReady().then(() => {
